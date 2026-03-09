@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JS Zapani's Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0e17;--surface:#111827;--surface2:#1a2235;--border:#1e2d45;--accent:#00d4ff;--accent2:#7c3aed;--accent3:#10b981;--accent4:#f59e0b;--accent5:#ef4444;--text:#e2e8f0;--text-muted:#64748b;--text-dim:#94a3b8;--code-bg:#0d1117;--tag-js:#f7df1e;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.7;overflow-x:hidden;}
+::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--accent2);border-radius:3px;}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;position:relative;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,212,255,.08) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(124,58,237,.07) 0%,transparent 60%);border-bottom:1px solid var(--border);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:.3;pointer-events:none;}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);color:var(--accent);padding:.4rem 1rem;border-radius:999px;font-size:.75rem;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.5rem;position:relative;}
+.hero-badge::before{content:'';width:6px;height:6px;background:var(--accent);border-radius:50%;animation:blink 1.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,7vw,5rem);font-weight:800;line-height:1.05;letter-spacing:-.03em;margin-bottom:1.5rem;position:relative;}
+.js-tag{color:var(--tag-js);display:inline-block;background:rgba(247,223,30,.08);border:1px solid rgba(247,223,30,.2);border-radius:8px;padding:0 .2em;}
+.accent{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.creator{display:block;font-size:.35em;font-weight:400;color:var(--text-muted);letter-spacing:.05em;margin-top:.4em;font-family:'JetBrains Mono',monospace;-webkit-text-fill-color:var(--text-muted);}
+.hero-desc{max-width:600px;color:var(--text-dim);font-size:1rem;margin-bottom:2.5rem;position:relative;}
+.hero-stats{display:flex;gap:2rem;flex-wrap:wrap;justify-content:center;position:relative;}
+.stat{text-align:center;}
+.stat-num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--accent);}
+.stat-label{font-size:.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;}
+.layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh;}
+.sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--surface);border-right:1px solid var(--border);padding:1.5rem 0;scrollbar-width:thin;}
+.sidebar-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;color:var(--text-muted);padding:0 1.5rem;margin-bottom:.75rem;}
+.sidebar a{display:flex;align-items:center;gap:.6rem;padding:.5rem 1.5rem;color:var(--text-dim);text-decoration:none;font-size:.85rem;transition:all .15s;border-left:2px solid transparent;}
+.sidebar a:hover{color:var(--text);background:rgba(255,255,255,.03);border-left-color:var(--accent);}
+.sidebar a.active{color:var(--accent);border-left-color:var(--accent);background:rgba(0,212,255,.05);}
+.sidebar-section{margin-bottom:1.5rem;}
+.nav-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.main-content{padding:3rem 2.5rem;max-width:860px;}
+.section{margin-bottom:5rem;scroll-margin-top:2rem;}
+.section-header{display:flex;align-items:center;gap:1rem;margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--border);}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text-muted);background:var(--surface2);border:1px solid var(--border);padding:.25rem .5rem;border-radius:4px;}
+.section h2{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:700;}
+.section h3{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:600;color:var(--text-dim);margin:2rem 0 1rem;}
+.topic-intro{background:linear-gradient(135deg,rgba(0,212,255,.05),rgba(124,58,237,.05));border:1px solid rgba(0,212,255,.15);border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:2rem;position:relative;overflow:hidden;}
+.topic-intro::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--accent),var(--accent2));}
+.topic-intro-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);margin-bottom:.5rem;}
+.topic-intro h4{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--text);margin-bottom:.5rem;}
+.topic-intro p,.topic-intro ul{color:var(--text-dim);font-size:.9rem;margin:0;}
+.topic-intro ul{padding-left:1.2rem;margin-top:.5rem;}
+.topic-intro li{margin-bottom:.2rem;}
+.code-block{position:relative;margin:1.5rem 0;border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+.code-header{display:flex;align-items:center;justify-content:space-between;background:var(--surface2);padding:.6rem 1rem;border-bottom:1px solid var(--border);}
+.code-lang{font-family:'JetBrains Mono',monospace;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);}
+.code-dots{display:flex;gap:6px;}
+.code-dots span{width:10px;height:10px;border-radius:50%;}
+.code-dots span:nth-child(1){background:#ff5f57;}
+.code-dots span:nth-child(2){background:#febc2e;}
+.code-dots span:nth-child(3){background:#28c840;}
+.copy-btn{background:none;border:1px solid var(--border);color:var(--text-muted);font-family:'JetBrains Mono',monospace;font-size:.65rem;padding:.2rem .6rem;border-radius:4px;cursor:pointer;transition:all .15s;text-transform:uppercase;}
+.copy-btn:hover{color:var(--accent);border-color:var(--accent);}
+pre{background:var(--code-bg);padding:1.25rem 1.5rem;overflow-x:auto;margin:0;}
+code{font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.8;}
+p code,li code{background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.15);color:var(--accent);padding:.1em .4em;border-radius:4px;font-size:.82em;}
+.kw{color:#c792ea;}.fn{color:#82aaff;}.str{color:#c3e88d;}.num{color:#f78c6c;}.cmt{color:#546e7a;font-style:italic;}.const{color:#ffcb6b;}.op{color:#89ddff;}.punc{color:#89ddff;}.bool{color:#ff5370;}
+.exercise{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent2);border-radius:10px;padding:1.5rem;margin:1.5rem 0;}
+.exercise-badge{display:inline-flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent2);margin-bottom:.75rem;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);padding:.2rem .6rem;border-radius:4px;}
+.exercise h4{font-family:'Syne',sans-serif;font-size:1rem;margin-bottom:.5rem;color:var(--text);}
+.difficulty{display:inline-flex;align-items:center;gap:.25rem;font-size:.7rem;margin-bottom:1rem;}
+.difficulty .star{color:var(--accent4);}.difficulty .star.e{color:var(--border);}
+.answer-toggle{margin-top:1.25rem;}
+.show-answer-btn{background:none;border:1px solid var(--border);color:var(--text-muted);font-family:'JetBrains Mono',monospace;font-size:.75rem;padding:.5rem 1rem;border-radius:6px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:.5rem;}
+.show-answer-btn:hover{border-color:var(--accent2);color:var(--accent2);}
+.show-answer-btn.revealed{border-color:var(--accent3);color:var(--accent3);}
+.answer-content{max-height:0;overflow:hidden;transition:max-height .4s ease;user-select:none;pointer-events:none;}
+.answer-content.revealed{max-height:9999px;user-select:auto;pointer-events:auto;}
+.callout{display:flex;gap:.75rem;padding:1rem 1.25rem;border-radius:8px;margin:1.5rem 0;font-size:.9rem;}
+.callout.tip{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);color:var(--text-dim);}
+.callout.info{background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15);color:var(--text-dim);}
+.callout.warn{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);color:var(--text-dim);}
+.callout-icon{font-size:1.1rem;flex-shrink:0;}
+table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.88rem;}
+th{background:var(--surface2);color:var(--text-dim);font-family:'JetBrains Mono',monospace;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;padding:.6rem 1rem;text-align:left;border:1px solid var(--border);}
+td{padding:.6rem 1rem;border:1px solid var(--border);color:var(--text-dim);}
+ol.steps{list-style:none;padding:0;margin:1.5rem 0;}
+ol.steps li{display:flex;gap:1rem;margin-bottom:1.25rem;align-items:flex-start;}
+.step-num{width:28px;height:28px;flex-shrink:0;background:var(--surface2);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--accent);margin-top:.1rem;}
+.step-content{flex:1;color:var(--text-dim);}
+.step-title{font-weight:600;color:var(--text);margin-bottom:.3rem;}
+.plugin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1rem;margin:1.5rem 0;}
+.plugin-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1rem;transition:border-color .2s;}
+.plugin-card:hover{border-color:var(--accent);}
+.plugin-card-icon{font-size:1.4rem;margin-bottom:.4rem;}
+.plugin-card-name{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);margin-bottom:.3rem;}
+.plugin-card-desc{font-size:.8rem;color:var(--text-muted);line-height:1.5;}
+.plugin-badge{display:inline-flex;margin-top:.5rem;font-size:.65rem;font-family:'JetBrains Mono',monospace;text-transform:uppercase;padding:.15rem .4rem;border-radius:3px;}
+.plugin-badge.blue{background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);color:var(--accent);}
+.plugin-badge.green{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);color:var(--accent3);}
+.plugin-badge.yellow{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);color:var(--accent4);}
+.project-box{background:linear-gradient(135deg,rgba(245,158,11,.05),rgba(124,58,237,.05));border:2px solid rgba(245,158,11,.25);border-radius:16px;padding:2rem;margin:2rem 0;}
+.project-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);color:var(--accent4);padding:.35rem 1rem;border-radius:999px;font-size:.7rem;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.12em;margin-bottom:1rem;}
+.project-title{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;margin-bottom:.5rem;}
+.project-sub{color:var(--text-muted);font-size:.9rem;margin-bottom:1.5rem;}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.75rem;margin:1.5rem 0;}
+.feat-item{background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;font-size:.85rem;color:var(--text-dim);display:flex;align-items:center;gap:.5rem;}
+.footer{background:var(--surface);border-top:1px solid var(--border);padding:3rem 2.5rem;text-align:center;color:var(--text-muted);font-size:.85rem;}
+.footer-logo{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem;}
+p{margin-bottom:1rem;color:var(--text-dim);}
+ul,ol{padding-left:1.5rem;margin-bottom:1rem;color:var(--text-dim);}
+li{margin-bottom:.4rem;}
+strong{color:var(--text);}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-badge">Windows Edition · 2025</div>
+  <h1>
+    <span class="js-tag">JS</span> Zapani's Academy<br>
+    <span class="accent">Do Zero ao Avançado</span>
+    <span class="creator">by Zapani &nbsp;·&nbsp; JavaScript, Node.js &amp; Banco de Dados</span>
+  </h1>
+  <p class="hero-desc">Ambiente fácil no Windows com Code Runner, exercícios progressivos, explicações claras e um projeto final completo.</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">12</div><div class="stat-label">Módulos</div></div>
+    <div class="stat"><div class="stat-num">60+</div><div class="stat-label">Exercícios</div></div>
+    <div class="stat"><div class="stat-num">1</div><div class="stat-label">Projeto Final</div></div>
+    <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Possibilidades</div></div>
+  </div>
+</div>
+
+<div class="layout">
+<nav class="sidebar">
+  <div class="sidebar-section">
+    <div class="sidebar-title">⚙ Ambiente</div>
+    <a href="#s1"><span class="nav-dot" style="background:#00d4ff"></span>01 — VSCode &amp; Node</a>
+    <a href="#s2"><span class="nav-dot" style="background:#00d4ff"></span>02 — Primeiros Passos</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">📐 Lógica &amp; JS</div>
+    <a href="#s3"><span class="nav-dot" style="background:#7c3aed"></span>03 — Variáveis &amp; Tipos</a>
+    <a href="#s4"><span class="nav-dot" style="background:#7c3aed"></span>04 — Operadores</a>
+    <a href="#s5"><span class="nav-dot" style="background:#7c3aed"></span>05 — Condicionais</a>
+    <a href="#s6"><span class="nav-dot" style="background:#7c3aed"></span>06 — Loops</a>
+    <a href="#s7"><span class="nav-dot" style="background:#7c3aed"></span>07 — Funções</a>
+    <a href="#s8"><span class="nav-dot" style="background:#7c3aed"></span>08 — Arrays &amp; Objetos</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">🚀 Avançado</div>
+    <a href="#s9"><span class="nav-dot" style="background:#10b981"></span>09 — Async/Await</a>
+    <a href="#s10"><span class="nav-dot" style="background:#10b981"></span>10 — ES6+ Moderno</a>
+    <a href="#s11"><span class="nav-dot" style="background:#10b981"></span>11 — Node.js &amp; APIs</a>
+    <a href="#s12"><span class="nav-dot" style="background:#f59e0b"></span>12 — Banco de Dados</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">🏆 Projeto</div>
+    <a href="#projeto"><span class="nav-dot" style="background:#ef4444"></span>Projeto Final</a>
+  </div>
+</nav>
+<main class="main-content">
+
+<!-- ===== MÓDULO 1 ===== -->
+<section class="section" id="s1">
+<div class="section-header"><span class="section-num">01</span><h2>Configurando o Ambiente no Windows</h2></div>
+<div class="topic-intro">
+  <div class="topic-intro-label">🗺 O que é este módulo?</div>
+  <h4>Preparar o terreno antes de codar</h4>
+  <p>Você vai instalar o VSCode (editor), o Node.js (runtime que roda JS no seu PC) e o plugin <strong>Code Runner</strong> — que executa seu arquivo com um único atalho, sem abrir terminal. Tudo pensado para Windows, sem complicação.</p>
+  <ul><li>Instalar VSCode com um único clique</li><li>Instalar Node.js LTS (arquivo .msi simples)</li><li>Configurar Code Runner para rodar JS com Ctrl+Alt+N</li></ul>
+</div>
+<h3>1.1 — Instalando o VSCode</h3>
+<ol class="steps">
+  <li><span class="step-num">1</span><div class="step-content"><div class="step-title">Baixar</div>Acesse <code>code.visualstudio.com</code> → clique em <strong>Download for Windows</strong>. Baixará um <code>.exe</code>.</div></li>
+  <li><span class="step-num">2</span><div class="step-content"><div class="step-title">Instalar</div>Execute o <code>.exe</code>. Marque <strong>"Adicionar ao PATH"</strong> e <strong>"Abrir com Code (menu de contexto)"</strong>.</div></li>
+  <li><span class="step-num">3</span><div class="step-content"><div class="step-title">Abrir</div>Menu Iniciar → VSCode, ou clique com botão direito em qualquer pasta → "Abrir com Code".</div></li>
+</ol>
+<h3>1.2 — Instalando o Node.js</h3>
+<p>O <strong>Node.js</strong> é o que permite rodar arquivos <code>.js</code> diretamente no seu computador, fora do navegador.</p>
+<ol class="steps">
+  <li><span class="step-num">1</span><div class="step-content"><div class="step-title">Baixar LTS</div>Acesse <code>nodejs.org</code> → clique no botão verde <strong>LTS</strong>. Baixará um arquivo <code>.msi</code>.</div></li>
+  <li><span class="step-num">2</span><div class="step-content"><div class="step-title">Instalar</div>Clique em Avançar em todas as telas. O Node já se adiciona ao PATH automaticamente.</div></li>
+  <li><span class="step-num">3</span><div class="step-content"><div class="step-title">Verificar</div>Abra o Prompt de Comando (Win+R → <code>cmd</code>) e teste:</div></li>
+</ol>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">cmd</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code>node --version
+<span class="cmt">rem Resultado esperado: v20.x.x ou superior</span>
+
+npm --version
+<span class="cmt">rem Resultado esperado: 10.x.x</span></code></pre></div>
+<div class="callout tip"><span class="callout-icon">💡</span><div>Se o comando não for reconhecido, feche e reabra o terminal — o Windows precisa "recarregar" o PATH.</div></div>
+<h3>1.3 — Extensões Essenciais do VSCode</h3>
+<p>Pressione <code>Ctrl+Shift+X</code> no VSCode e instale cada extensão pelo nome:</p>
+<div class="plugin-grid">
+  <div class="plugin-card"><div class="plugin-card-icon">⚡</div><div class="plugin-card-name">Code Runner</div><div class="plugin-card-desc">Executa seu .js com <strong>Ctrl+Alt+N</strong> — sem abrir terminal!</div><div class="plugin-badge green">⭐ Essencial</div></div>
+  <div class="plugin-card"><div class="plugin-card-icon">🔍</div><div class="plugin-card-name">ESLint</div><div class="plugin-card-desc">Detecta erros no código em tempo real com sublinhado vermelho.</div><div class="plugin-badge blue">Qualidade</div></div>
+  <div class="plugin-card"><div class="plugin-card-icon">✨</div><div class="plugin-card-name">Prettier</div><div class="plugin-card-desc">Formata o código automaticamente ao salvar. Zero esforço.</div><div class="plugin-badge blue">Formatação</div></div>
+  <div class="plugin-card"><div class="plugin-card-icon">🟨</div><div class="plugin-card-name">JS ES6 Snippets</div><div class="plugin-card-desc">Atalhos rápidos: <code>clg</code> + Tab vira <code>console.log()</code>.</div><div class="plugin-badge yellow">Produtividade</div></div>
+  <div class="plugin-card"><div class="plugin-card-icon">🌈</div><div class="plugin-card-name">Bracket Pair Colors</div><div class="plugin-card-desc">Colore pares de chaves com cores diferentes. Facilita a leitura.</div><div class="plugin-badge yellow">Visual</div></div>
+  <div class="plugin-card"><div class="plugin-card-icon">🗄</div><div class="plugin-card-name">SQLite Viewer</div><div class="plugin-card-desc">Visualiza arquivos <code>.db</code> dentro do VSCode. Útil no módulo 12.</div><div class="plugin-badge blue">Banco</div></div>
+</div>
+<h3>1.4 — Configurando o Code Runner</h3>
+<p>Pressione <code>Ctrl+Shift+P</code> → digite <strong>Open User Settings JSON</strong> → Enter. Cole as linhas abaixo:</p>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">settings.json</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code>{
+  <span class="str">"code-runner.runInTerminal"</span>: <span class="bool">true</span>,
+  <span class="str">"code-runner.saveFileBeforeRun"</span>: <span class="bool">true</span>,
+  <span class="str">"editor.formatOnSave"</span>: <span class="bool">true</span>,
+  <span class="str">"editor.defaultFormatter"</span>: <span class="str">"esbenp.prettier-vscode"</span>,
+  <span class="str">"editor.tabSize"</span>: <span class="num">2</span>
+}</code></pre></div>
+<div class="callout info"><span class="callout-icon">ℹ</span><div>Com Code Runner configurado: abra qualquer <code>.js</code> e pressione <strong>Ctrl+Alt+N</strong>. O resultado aparece no terminal integrado do VSCode.</div></div>
+</section>
+
+<!-- ===== MÓDULO 2 ===== -->
+<section class="section" id="s2">
+<div class="section-header"><span class="section-num">02</span><h2>Primeiros Passos com JS</h2></div>
+<div class="topic-intro">
+  <div class="topic-intro-label">🗺 O que é este módulo?</div>
+  <h4>Seu primeiro código JavaScript rodando</h4>
+  <p>Vamos criar o primeiro arquivo <code>.js</code>, aprender o <code>console.log()</code> e entender como o Node executa código. É aqui que começa a prática — e tudo pode ser rodado com Ctrl+Alt+N direto no VSCode.</p>
+</div>
+<h3>2.1 — Criando a primeira pasta de projeto</h3>
+<p>Crie uma pasta no Windows (ex: <code>C:\projetos\meu-js</code>). Abra o VSCode → <strong>Arquivo → Abrir Pasta</strong>. Crie um arquivo <code>index.js</code> no explorador de arquivos do lado esquerdo.</p>
+<div class="callout tip"><span class="callout-icon">💡</span><div>Dica rápida: clique com botão direito dentro da pasta no Windows Explorer → <strong>"Abrir com Code"</strong> — e o VSCode já abre na pasta certa!</div></div>
+<h3>2.2 — Olá, Mundo!</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript — index.js</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code><span class="cmt">// Pressione Ctrl+Alt+N para executar!</span>
+console.<span class="fn">log</span>(<span class="str">"Olá, Zapani's Academy! 🚀"</span>);
+
+console.<span class="fn">log</span>(<span class="str">"Texto simples"</span>);
+console.<span class="fn">warn</span>(<span class="str">"⚠ Atenção!"</span>);
+console.<span class="fn">error</span>(<span class="str">"❌ Erro simulado"</span>);
+console.<span class="fn">table</span>([<span class="str">"js"</span>, <span class="str">"node"</span>, <span class="str">"sql"</span>]);
+console.<span class="fn">log</span>(<span class="num">2</span> + <span class="num">2</span>);  <span class="cmt">// 4</span></code></pre></div>
+<div class="callout info"><span class="callout-icon">ℹ</span><div>O <code>console.log()</code> é sua principal ferramenta de debug. Use sempre para ver o valor de variáveis e entender o que está acontecendo.</div></div>
+</section>
+
+<!-- ===== MÓDULO 3 ===== -->
+<section class="section" id="s3">
+<div class="section-header"><span class="section-num">03</span><h2>Variáveis &amp; Tipos de Dados</h2></div>
+<div class="topic-intro">
+  <div class="topic-intro-label">🗺 O que é este módulo?</div>
+  <h4>Guardar e manipular informações</h4>
+  <p>Variáveis são "caixinhas" que guardam informações. JavaScript tem diferentes tipos de dados — texto, número, verdadeiro/falso — e saber diferenciá-los é a base de tudo.</p>
+  <ul><li><strong>const</strong> — valor fixo (use por padrão)</li><li><strong>let</strong> — valor que pode mudar</li><li><strong>Tipos:</strong> string, number, boolean, null, undefined</li></ul>
+</div>
+<h3>3.1 — const vs let</h3>
+<table><tr><th>Palavra-chave</th><th>Reatribuição</th><th>Usar quando</th></tr><tr><td><code>const</code></td><td>❌ Não</td><td>Valor não muda (padrão)</td></tr><tr><td><code>let</code></td><td>✅ Sim</td><td>Valor pode mudar</td></tr><tr><td><code>var</code></td><td>✅ Sim</td><td>⚠ Evitar — legado</td></tr></table>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code><span class="kw">const</span> <span class="const">nome</span> = <span class="str">"Zapani"</span>;
+<span class="kw">const</span> <span class="const">PI</span> = <span class="num">3.14159</span>;
+<span class="kw">let</span> contador = <span class="num">0</span>;
+contador++;  <span class="cmt">// 1</span>
+<span class="cmt">// nome = "João"; // TypeError!</span></code></pre></div>
+<h3>3.2 — Tipos Primitivos</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code><span class="kw">const</span> <span class="const">cidade</span> = <span class="str">"São Paulo"</span>;
+<span class="kw">const</span> <span class="const">frase</span>  = <span class="str">`Moro em ${cidade}`</span>;  <span class="cmt">// template literal</span>
+<span class="kw">const</span> <span class="const">idade</span>  = <span class="num">25</span>;
+<span class="kw">const</span> <span class="const">ativo</span>  = <span class="bool">true</span>;
+<span class="kw">let</span>   vazio  = <span class="bool">null</span>;
+<span class="kw">let</span>   res;    <span class="cmt">// undefined</span>
+
+console.<span class="fn">log</span>(<span class="kw">typeof</span> cidade);  <span class="cmt">// "string"</span>
+console.<span class="fn">log</span>(<span class="kw">typeof</span> idade);   <span class="cmt">// "number"</span>
+console.<span class="fn">log</span>(<span class="kw">typeof</span> ativo);   <span class="cmt">// "boolean"</span>
+console.<span class="fn">log</span>(<span class="kw">typeof</span> vazio);   <span class="cmt">// "object" ← bug histórico do JS!</span></code></pre></div>
+
+<div class="exercise"><div class="exercise-badge">📝 3.1</div><h4>Cartão de Visita</h4><div class="difficulty"><span class="star">★</span><span class="star e">★</span><span class="star e">★</span><span class="star e">★</span><span class="star e">★</span> Básico</div><p>Crie variáveis <code>nome</code>, <code>profissao</code>, <code>cidade</code> e <code>experiencia</code>. Use template literal para imprimir: <em>"👤 Zapani | 💼 Dev JS | 📍 SP | ⏱ 3 anos"</em></p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">nome</span> = <span class="str">"Zapani"</span>, profissao = <span class="str">"Dev JS"</span>, cidade = <span class="str">"SP"</span>, experiencia = <span class="num">3</span>;
+console.<span class="fn">log</span>(<span class="str">`👤 ${nome} | 💼 ${profissao} | 📍 ${cidade} | ⏱ ${experiencia} anos`</span>);</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 3.2</div><h4>Calculadora de IMC</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span><span class="star e">★</span> Básico</div><p>Crie <code>peso</code> (kg) e <code>altura</code> (m). Calcule o IMC: <strong>peso / (altura²)</strong>. Exiba com <code>.toFixed(2)</code>.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">peso</span> = <span class="num">70</span>, altura = <span class="num">1.75</span>;
+<span class="kw">const</span> <span class="const">imc</span> = peso / (altura ** <span class="num">2</span>);
+console.<span class="fn">log</span>(<span class="str">`IMC: ${imc.<span class="fn">toFixed</span>(2)}`</span>);  <span class="cmt">// 22.86</span></code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 3.3</div><h4>Conversor de Temperatura</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span><span class="star e">★</span> Básico</div><p>Converta <code>36.5°C</code> para Fahrenheit: <strong>F = (C × 9/5) + 32</strong>. Exiba: <em>"36.5°C = 97.7°F"</em></p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">c</span> = <span class="num">36.5</span>;
+<span class="kw">const</span> <span class="const">f</span> = (c * <span class="num">9</span>/<span class="num">5</span>) + <span class="num">32</span>;
+console.<span class="fn">log</span>(<span class="str">`${c}°C = ${f.<span class="fn">toFixed</span>(1)}°F`</span>);</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 3.4</div><h4>Detector de Tipos</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Crie 5 variáveis com tipos diferentes. Use <code>typeof</code> em cada uma. Observe que <code>typeof null</code> retorna <em>"object"</em> — um bug histórico do JS!</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">a</span> = <span class="str">"olá"</span>; <span class="kw">const</span> <span class="const">b</span> = <span class="num">42</span>; <span class="kw">const</span> <span class="const">c</span> = <span class="bool">true</span>; <span class="kw">const</span> <span class="const">d</span> = <span class="bool">null</span>; <span class="kw">let</span> e;
+console.<span class="fn">log</span>(<span class="kw">typeof</span> a); <span class="cmt">// "string"</span>
+console.<span class="fn">log</span>(<span class="kw">typeof</span> b); <span class="cmt">// "number"</span>
+console.<span class="fn">log</span>(<span class="kw">typeof</span> c); <span class="cmt">// "boolean"</span>
+console.<span class="fn">log</span>(<span class="kw">typeof</span> d); <span class="cmt">// "object" ← bug histórico!</span>
+console.<span class="fn">log</span>(<span class="kw">typeof</span> e); <span class="cmt">// "undefined"</span></code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 3.5</div><h4>Perfil de Produto</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Crie um objeto <code>produto</code> com <code>nome</code> (string), <code>preco</code> (number), <code>emEstoque</code> (boolean) e <code>desconto</code> (null). Exiba um resumo com template literal e use <code>??</code> para tratar o null.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">produto</span> = { nome: <span class="str">"Teclado"</span>, preco: <span class="num">299.90</span>, emEstoque: <span class="bool">true</span>, desconto: <span class="bool">null</span> };
+console.<span class="fn">log</span>(<span class="str">`📦 ${produto.nome} — R$ ${produto.preco}`</span>);
+console.<span class="fn">log</span>(<span class="str">`🏷 Desconto: ${produto.desconto ?? "nenhum"}`</span>);</code></pre></div></div></div></div>
+</section>
+
+<!-- ===== MÓDULO 4 ===== -->
+<section class="section" id="s4">
+<div class="section-header"><span class="section-num">04</span><h2>Operadores</h2></div>
+<div class="topic-intro"><div class="topic-intro-label">🗺 O que é este módulo?</div><h4>As ferramentas de cálculo e comparação</h4><p>Operadores são símbolos que fazem contas, comparam valores e combinam condições. São a base de toda lógica — sem eles, não há como tomar decisões ou calcular resultados.</p><ul><li><strong>Aritméticos:</strong> + - * / % **</li><li><strong>Comparação:</strong> === !== &gt; &lt; &gt;= &lt;=</li><li><strong>Lógicos:</strong> &amp;&amp; || !</li></ul></div>
+<h3>4.1 — Aritméticos</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code>console.<span class="fn">log</span>(<span class="num">10</span> + <span class="num">3</span>);  <span class="cmt">// 13</span>
+console.<span class="fn">log</span>(<span class="num">10</span> % <span class="num">3</span>);  <span class="cmt">// 1 — resto</span>
+console.<span class="fn">log</span>(<span class="num">2</span> ** <span class="num">8</span>);  <span class="cmt">// 256 — potência</span>
+<span class="kw">let</span> x = <span class="num">10</span>; x += <span class="num">5</span>; x++;  <span class="cmt">// x = 16</span></code></pre></div>
+<h3>4.2 — Comparação e Lógicos</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code>console.<span class="fn">log</span>(<span class="num">5</span> === <span class="num">5</span>);    <span class="cmt">// true</span>
+console.<span class="fn">log</span>(<span class="num">5</span> === <span class="str">"5"</span>);  <span class="cmt">// false — tipos diferentes!</span>
+<span class="kw">const</span> <span class="const">logado</span> = <span class="bool">true</span>, admin = <span class="bool">false</span>;
+console.<span class="fn">log</span>(logado && admin);  <span class="cmt">// false</span>
+console.<span class="fn">log</span>(logado || admin);  <span class="cmt">// true</span>
+console.<span class="fn">log</span>(!logado);          <span class="cmt">// false</span></code></pre></div>
+
+<div class="exercise"><div class="exercise-badge">📝 4.1</div><h4>Troco</h4><div class="difficulty"><span class="star">★</span><span class="star e">★</span><span class="star e">★</span><span class="star e">★</span><span class="star e">★</span> Básico</div><p>Dados <code>preco = 37.50</code> e <code>pagamento = 50</code>, calcule e exiba o troco.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">preco</span> = <span class="num">37.50</span>, pagamento = <span class="num">50</span>;
+console.<span class="fn">log</span>(<span class="str">`💵 Troco: R$ ${(pagamento - preco).<span class="fn">toFixed</span>(2)}`</span>);</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 4.2</div><h4>Par ou Ímpar</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span><span class="star e">★</span> Básico</div><p>Use o operador <code>%</code> para verificar se um número é par ou ímpar.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">n</span> = <span class="num">17</span>;
+console.<span class="fn">log</span>(<span class="str">`${n} é ${n % <span class="num">2</span> === <span class="num">0</span> ? "par" : "ímpar"}`</span>);</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 4.3</div><h4>Validador de Acesso</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Use <code>&amp;&amp;</code> para liberar acesso apenas se <code>usuario === "admin"</code> E <code>senha === "1234"</code> E <code>ativo === true</code>.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">u</span> = <span class="str">"admin"</span>, s = <span class="str">"1234"</span>, ativo = <span class="bool">true</span>;
+<span class="kw">const</span> <span class="const">ok</span> = u === <span class="str">"admin"</span> && s === <span class="str">"1234"</span> && ativo;
+console.<span class="fn">log</span>(<span class="str">`🔐 Acesso ${ok ? "liberado ✅" : "negado ❌"}`</span>);</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 4.4</div><h4>Área e Perímetro</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span><span class="star e">★</span> Básico</div><p>Calcule área (largura × altura) e perímetro (2 × (largura + altura)) de um retângulo 8×5.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">l</span> = <span class="num">8</span>, h = <span class="num">5</span>;
+console.<span class="fn">log</span>(<span class="str">`Área: ${l * h} | Perímetro: ${<span class="num">2</span> * (l + h)}`</span>);</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 4.5</div><h4>Desconto Progressivo</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Produto R$500, desconto 15%. Calcule o valor do desconto e o preço final. Exiba tudo formatado.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">preco</span> = <span class="num">500</span>, desc = <span class="num">15</span>;
+<span class="kw">const</span> <span class="const">vDesc</span> = preco * desc / <span class="num">100</span>;
+console.<span class="fn">log</span>(<span class="str">`Original: R$ ${preco} | Desconto: R$ ${vDesc} | Final: R$ ${preco - vDesc}`</span>);</code></pre></div></div></div></div>
+</section>
+
+<!-- ===== MÓDULO 5 ===== -->
+<section class="section" id="s5">
+<div class="section-header"><span class="section-num">05</span><h2>Estruturas Condicionais</h2></div>
+<div class="topic-intro"><div class="topic-intro-label">🗺 O que é este módulo?</div><h4>Tomar decisões no código</h4><p>Condicionais permitem ao programa "pensar" — escolher caminhos diferentes com base em condições. É como um semáforo: se vermelho, pare; se verde, siga. Sem condicionais, todo código seria linear.</p><ul><li><strong>if/else if/else</strong> — múltiplas condições</li><li><strong>switch</strong> — verificar um valor contra muitos casos</li><li><strong>Ternário</strong> — if/else compacto em uma linha</li></ul></div>
+<h3>5.1 — if / else if / else</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code><span class="kw">const</span> <span class="const">nota</span> = <span class="num">75</span>;
+<span class="kw">if</span> (nota >= <span class="num">90</span>)      console.<span class="fn">log</span>(<span class="str">"⭐ Excelente!"</span>);
+<span class="kw">else if</span> (nota >= <span class="num">70</span>) console.<span class="fn">log</span>(<span class="str">"✅ Aprovado!"</span>);
+<span class="kw">else if</span> (nota >= <span class="num">50</span>) console.<span class="fn">log</span>(<span class="str">"⚠ Recuperação"</span>);
+<span class="kw">else</span>                 console.<span class="fn">log</span>(<span class="str">"❌ Reprovado"</span>);</code></pre></div>
+<h3>5.2 — Switch</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code><span class="kw">const</span> <span class="const">dia</span> = <span class="num">3</span>;
+<span class="kw">switch</span> (dia) {
+  <span class="kw">case</span> <span class="num">1</span>: console.<span class="fn">log</span>(<span class="str">"Segunda"</span>); <span class="kw">break</span>;
+  <span class="kw">case</span> <span class="num">3</span>: console.<span class="fn">log</span>(<span class="str">"Quarta"</span>);  <span class="kw">break</span>;
+  <span class="kw">case</span> <span class="num">5</span>: console.<span class="fn">log</span>(<span class="str">"Sexta"</span>);   <span class="kw">break</span>;
+  <span class="kw">default</span>: console.<span class="fn">log</span>(<span class="str">"Outro"</span>);
+}</code></pre></div>
+<h3>5.3 — Ternário</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code><span class="kw">const</span> <span class="const">idade</span> = <span class="num">20</span>;
+<span class="kw">const</span> <span class="const">acesso</span> = idade >= <span class="num">18</span> ? <span class="str">"✅ Permitido"</span> : <span class="str">"❌ Negado"</span>;
+console.<span class="fn">log</span>(acesso);</code></pre></div>
+
+<div class="exercise"><div class="exercise-badge">📝 5.1</div><h4>Classificador de Idade</h4><div class="difficulty"><span class="star">★</span><span class="star e">★</span><span class="star e">★</span><span class="star e">★</span><span class="star e">★</span> Básico</div><p>Dado um valor de <code>idade</code>, classifique: &lt;12 = "Criança", 12-17 = "Adolescente", 18-59 = "Adulto", 60+ = "Idoso".</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">idade</span> = <span class="num">35</span>;
+<span class="kw">let</span> cat;
+<span class="kw">if</span> (idade < <span class="num">12</span>) cat = <span class="str">"Criança"</span>;
+<span class="kw">else if</span> (idade < <span class="num">18</span>) cat = <span class="str">"Adolescente"</span>;
+<span class="kw">else if</span> (idade < <span class="num">60</span>) cat = <span class="str">"Adulto"</span>;
+<span class="kw">else</span> cat = <span class="str">"Idoso"</span>;
+console.<span class="fn">log</span>(<span class="str">`${idade} anos → ${cat}`</span>);</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 5.2</div><h4>Calculadora com Switch</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span><span class="star e">★</span> Básico</div><p>Dados <code>a</code>, <code>b</code> e <code>op</code> ("+"/"-"/"*"/"/"), use switch para calcular o resultado.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">a</span> = <span class="num">10</span>, b = <span class="num">3</span>, op = <span class="str">"*"</span>;
+<span class="kw">let</span> r;
+<span class="kw">switch</span>(op){
+  <span class="kw">case</span> <span class="str">"+"</span>: r = a+b; <span class="kw">break</span>; <span class="kw">case</span> <span class="str">"-"</span>: r = a-b; <span class="kw">break</span>;
+  <span class="kw">case</span> <span class="str">"*"</span>: r = a*b; <span class="kw">break</span>; <span class="kw">case</span> <span class="str">"/"</span>: r = b ? a/b : <span class="str">"Erro"</span>; <span class="kw">break</span>;
+  <span class="kw">default</span>: r = <span class="str">"Op. inválido"</span>;
+}
+console.<span class="fn">log</span>(<span class="str">`${a} ${op} ${b} = ${r}`</span>);</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 5.3</div><h4>Semáforo</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span><span class="star e">★</span> Básico</div><p>Dado <code>cor</code> ("vermelho"/"amarelo"/"verde"), exiba a ação correta: Pare / Atenção / Siga.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">cor</span> = <span class="str">"verde"</span>;
+<span class="kw">if</span> (cor === <span class="str">"vermelho"</span>) console.<span class="fn">log</span>(<span class="str">"🔴 Pare!"</span>);
+<span class="kw">else if</span> (cor === <span class="str">"amarelo"</span>) console.<span class="fn">log</span>(<span class="str">"🟡 Atenção!"</span>);
+<span class="kw">else if</span> (cor === <span class="str">"verde"</span>) console.<span class="fn">log</span>(<span class="str">"🟢 Siga!"</span>);
+<span class="kw">else</span> console.<span class="fn">log</span>(<span class="str">"Cor inválida"</span>);</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 5.4</div><h4>Triângulo Válido</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Dados 3 lados, verifique se formam triângulo válido (cada lado &lt; soma dos outros 2) e classifique: equilátero, isósceles ou escaleno.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> [<span class="const">a</span>, b, c] = [<span class="num">5</span>, <span class="num">5</span>, <span class="num">8</span>];
+<span class="kw">if</span> (!(a+b>c && a+c>b && b+c>a)) { console.<span class="fn">log</span>(<span class="str">"❌ Inválido"</span>); }
+<span class="kw">else if</span> (a===b && b===c) console.<span class="fn">log</span>(<span class="str">"Equilátero"</span>);
+<span class="kw">else if</span> (a===b||b===c||a===c) console.<span class="fn">log</span>(<span class="str">"Isósceles"</span>);
+<span class="kw">else</span> console.<span class="fn">log</span>(<span class="str">"Escaleno"</span>);</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 5.5</div><h4>Calculadora de Frete</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Compra &gt; R$500 = frete grátis, R$200-499 = R$15, abaixo R$200 = R$30. Exiba compra, frete e total.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">compra</span> = <span class="num">350</span>;
+<span class="kw">const</span> <span class="const">frete</span> = compra >= <span class="num">500</span> ? <span class="num">0</span> : compra >= <span class="num">200</span> ? <span class="num">15</span> : <span class="num">30</span>;
+console.<span class="fn">log</span>(<span class="str">`Compra: R$${compra} | Frete: ${frete ? "R$"+frete : "Grátis🎉"} | Total: R$${compra+frete}`</span>);</code></pre></div></div></div></div>
+</section>
+
+<!-- ===== MÓDULO 6 ===== -->
+<section class="section" id="s6">
+<div class="section-header"><span class="section-num">06</span><h2>Loops e Repetição</h2></div>
+<div class="topic-intro"><div class="topic-intro-label">🗺 O que é este módulo?</div><h4>Repetir ações sem reescrever código</h4><p>Loops executam um bloco várias vezes. Imprimir 1000 números? 3 linhas com loop. É um dos conceitos mais poderosos da programação — e você vai usar o tempo todo.</p><ul><li><strong>for</strong> — quando sabe quantas vezes repetir</li><li><strong>while</strong> — enquanto uma condição for verdadeira</li><li><strong>for...of</strong> — percorrer arrays de forma moderna</li></ul></div>
+<h3>6.1 — for, while e for...of</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code><span class="cmt">// for clássico</span>
+<span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">1</span>; i <= <span class="num">5</span>; i++) console.<span class="fn">log</span>(i);
+
+<span class="cmt">// while</span>
+<span class="kw">let</span> t = <span class="num">0</span>;
+<span class="kw">while</span> (t < <span class="num">3</span>) { t++; console.<span class="fn">log</span>(<span class="str">`Tentativa ${t}`</span>); }
+
+<span class="cmt">// for...of — melhor para arrays</span>
+<span class="kw">for</span> (<span class="kw">const</span> <span class="const">lang</span> <span class="kw">of</span> [<span class="str">"JS"</span>, <span class="str">"Python"</span>, <span class="str">"Rust"</span>])
+  console.<span class="fn">log</span>(<span class="str">`📌 ${lang}`</span>);</code></pre></div>
+
+<div class="exercise"><div class="exercise-badge">📝 6.1</div><h4>Tabuada</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span><span class="star e">★</span> Básico</div><p>Imprima a tabuada do 7 (7×1 até 7×10) no formato "7 x 1 = 7".</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">1</span>; i <= <span class="num">10</span>; i++) console.<span class="fn">log</span>(<span class="str">`7 x ${i} = ${<span class="num">7</span>*i}`</span>);</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 6.2</div><h4>FizzBuzz</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>1 a 30: múltiplos de 3 → "Fizz", de 5 → "Buzz", de ambos → "FizzBuzz".</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">for</span> (<span class="kw">let</span> i=<span class="num">1</span>; i<=<span class="num">30</span>; i++){
+  <span class="kw">if</span>(i%<span class="num">15</span>===<span class="num">0</span>) console.<span class="fn">log</span>(<span class="str">"FizzBuzz"</span>);
+  <span class="kw">else if</span>(i%<span class="num">3</span>===<span class="num">0</span>) console.<span class="fn">log</span>(<span class="str">"Fizz"</span>);
+  <span class="kw">else if</span>(i%<span class="num">5</span>===<span class="num">0</span>) console.<span class="fn">log</span>(<span class="str">"Buzz"</span>);
+  <span class="kw">else</span> console.<span class="fn">log</span>(i);
+}</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 6.3</div><h4>Somatório</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span><span class="star e">★</span> Básico</div><p>Use <code>while</code> para somar todos os números de 1 a 100. Resultado: 5050.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">let</span> soma = <span class="num">0</span>, i = <span class="num">1</span>;
+<span class="kw">while</span>(i <= <span class="num">100</span>) { soma += i; i++; }
+console.<span class="fn">log</span>(<span class="str">`Soma 1-100 = ${soma}`</span>); <span class="cmt">// 5050</span></code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 6.4</div><h4>Pirâmide</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Imprima uma pirâmide de 5 linhas: *, **, ***, ****, *****</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">for</span> (<span class="kw">let</span> i=<span class="num">1</span>; i<=<span class="num">5</span>; i++) console.<span class="fn">log</span>(<span class="str">"*"</span>.<span class="fn">repeat</span>(i));</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 6.5</div><h4>Números Primos</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span> Avançado</div><p>Imprima todos os primos entre 2 e 50.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">for</span> (<span class="kw">let</span> n=<span class="num">2</span>; n<=<span class="num">50</span>; n++){
+  <span class="kw">let</span> p = <span class="bool">true</span>;
+  <span class="kw">for</span> (<span class="kw">let</span> d=<span class="num">2</span>; d&lt;n; d++) <span class="kw">if</span>(n%d===<span class="num">0</span>){ p=<span class="bool">false</span>; <span class="kw">break</span>; }
+  <span class="kw">if</span>(p) console.<span class="fn">log</span>(n);
+}</code></pre></div></div></div></div>
+</section>
+
+<!-- ===== MÓDULO 7 ===== -->
+<section class="section" id="s7">
+<div class="section-header"><span class="section-num">07</span><h2>Funções</h2></div>
+<div class="topic-intro"><div class="topic-intro-label">🗺 O que é este módulo?</div><h4>Blocos de código reutilizáveis</h4><p>Funções são como "receitas" — escrita uma vez, usada quantas vezes precisar. São o coração da organização em programação. Sem elas, todo código seria uma bagunça de repetições.</p><ul><li><strong>function</strong> — declaração tradicional com hoisting</li><li><strong>Arrow =></strong> — sintaxe moderna e concisa</li><li><strong>Parâmetros padrão, rest e retorno</strong></li></ul></div>
+<h3>7.1 — Declaração e Arrow Function</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code><span class="cmt">// Tradicional</span>
+<span class="kw">function</span> <span class="fn">soma</span>(a, b) { <span class="kw">return</span> a + b; }
+console.<span class="fn">log</span>(<span class="fn">soma</span>(<span class="num">5</span>, <span class="num">3</span>));  <span class="cmt">// 8</span>
+
+<span class="cmt">// Arrow — mais concisa</span>
+<span class="kw">const</span> <span class="const">dobrar</span> = n => n * <span class="num">2</span>;
+console.<span class="fn">log</span>(<span class="fn">dobrar</span>(<span class="num">7</span>));  <span class="cmt">// 14</span>
+
+<span class="cmt">// Parâmetro padrão</span>
+<span class="kw">const</span> <span class="const">saudar</span> = (nome = <span class="str">"Visitante"</span>) => <span class="str">`Olá, ${nome}!`</span>;
+console.<span class="fn">log</span>(<span class="fn">saudar</span>());          <span class="cmt">// Olá, Visitante!</span>
+console.<span class="fn">log</span>(<span class="fn">saudar</span>(<span class="str">"Zapani"</span>));  <span class="cmt">// Olá, Zapani!</span></code></pre></div>
+
+<div class="exercise"><div class="exercise-badge">📝 7.1</div><h4>Média Variádica</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span><span class="star e">★</span> Básico</div><p>Crie <code>media(...notas)</code> que calcule a média de qualquer quantidade de notas usando rest parameter e <code>reduce</code>.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">media</span> = (...ns) => ns.<span class="fn">reduce</span>((a,b) => a+b, <span class="num">0</span>) / ns.length;
+console.<span class="fn">log</span>(<span class="fn">media</span>(<span class="num">7</span>,<span class="num">8</span>,<span class="num">9</span>));     <span class="cmt">// 8</span>
+console.<span class="fn">log</span>(<span class="fn">media</span>(<span class="num">6</span>,<span class="num">5</span>,<span class="num">10</span>,<span class="num">8</span>)); <span class="cmt">// 7.25</span></code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 7.2</div><h4>Validador de Senha</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Crie <code>validarSenha(senha)</code> que retorne true se tiver 8+ caracteres, e teste com várias senhas.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">validar</span> = s => s.length >= <span class="num">8</span>;
+[<span class="str">"abc"</span>, <span class="str">"minhasenha123"</span>, <span class="str">"1234"</span>].<span class="fn">forEach</span>(s =>
+  console.<span class="fn">log</span>(<span class="str">`"${s}" → ${<span class="fn">validar</span>(s) ? "✅" : "❌"}`</span>));</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 7.3</div><h4>Fatorial Recursivo</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Crie <code>fatorial(n)</code> com recursão. Caso base: <code>fatorial(0) = 1</code>.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">function</span> <span class="fn">fatorial</span>(n){ <span class="kw">return</span> n === <span class="num">0</span> ? <span class="num">1</span> : n * <span class="fn">fatorial</span>(n-<span class="num">1</span>); }
+console.<span class="fn">log</span>(<span class="fn">fatorial</span>(<span class="num">5</span>));  <span class="cmt">// 120</span>
+console.<span class="fn">log</span>(<span class="fn">fatorial</span>(<span class="num">10</span>)); <span class="cmt">// 3628800</span></code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 7.4</div><h4>Gerador de Senhas</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span> Avançado</div><p>Crie <code>gerarSenha(tamanho=10)</code> que gere senha aleatória com letras, números e símbolos.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">gerarSenha</span> = (n = <span class="num">10</span>) => {
+  <span class="kw">const</span> <span class="const">c</span> = <span class="str">"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$"</span>;
+  <span class="kw">return</span> Array.<span class="fn">from</span>({length:n}, () => c[Math.<span class="fn">floor</span>(Math.<span class="fn">random</span>()*c.length)]).<span class="fn">join</span>(<span class="str">""</span>);
+};
+console.<span class="fn">log</span>(<span class="fn">gerarSenha</span>(<span class="num">12</span>));</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 7.5</div><h4>Funções de Alta Ordem</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span> Avançado</div><p>Crie <code>aplicar(fn, valor)</code> que receba outra função como argumento. Crie <code>dobrar</code>, <code>quadrado</code> e <code>inverter</code> para passar como argumento.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">aplicar</span> = (fn, v) => <span class="fn">fn</span>(v);
+<span class="kw">const</span> <span class="const">dobrar</span>   = n => n * <span class="num">2</span>;
+<span class="kw">const</span> <span class="const">quadrado</span> = n => n ** <span class="num">2</span>;
+<span class="kw">const</span> <span class="const">inverter</span> = n => -n;
+console.<span class="fn">log</span>(<span class="fn">aplicar</span>(dobrar, <span class="num">5</span>));    <span class="cmt">// 10</span>
+console.<span class="fn">log</span>(<span class="fn">aplicar</span>(quadrado, <span class="num">4</span>));  <span class="cmt">// 16</span>
+console.<span class="fn">log</span>(<span class="fn">aplicar</span>(inverter, <span class="num">7</span>));  <span class="cmt">// -7</span></code></pre></div></div></div></div>
+</section>
+
+<!-- ===== MÓDULO 8 ===== -->
+<section class="section" id="s8">
+<div class="section-header"><span class="section-num">08</span><h2>Arrays &amp; Objetos</h2></div>
+<div class="topic-intro"><div class="topic-intro-label">🗺 O que é este módulo?</div><h4>Coleções de dados — a espinha dorsal de todo app</h4><p>Arrays são listas ordenadas e objetos são estruturas com propriedades nomeadas. Praticamente todo programa usa essas duas estruturas. Dominar <code>map</code>, <code>filter</code> e <code>reduce</code> é o que diferencia um dev JS iniciante de um intermediário.</p><ul><li><strong>map</strong> — transforma cada elemento</li><li><strong>filter</strong> — filtra por condição</li><li><strong>reduce</strong> — acumula em um único valor</li><li><strong>Objetos</strong> e desestruturação</li></ul></div>
+<h3>8.1 — Arrays e Métodos Modernos</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code><span class="kw">const</span> <span class="const">nums</span> = [<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>,<span class="num">5</span>];
+<span class="kw">const</span> <span class="const">dobrados</span> = nums.<span class="fn">map</span>(n => n*<span class="num">2</span>);    <span class="cmt">// [2,4,6,8,10]</span>
+<span class="kw">const</span> <span class="const">pares</span>    = nums.<span class="fn">filter</span>(n => n%<span class="num">2</span>===<span class="num">0</span>); <span class="cmt">// [2,4]</span>
+<span class="kw">const</span> <span class="const">soma</span>     = nums.<span class="fn">reduce</span>((a,n) => a+n, <span class="num">0</span>); <span class="cmt">// 15</span>
+<span class="kw">const</span> <span class="const">primeiro</span> = nums.<span class="fn">find</span>(n => n><span class="num">3</span>);      <span class="cmt">// 4</span></code></pre></div>
+<h3>8.2 — Objetos e Desestruturação</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code><span class="kw">const</span> <span class="const">aluno</span> = { nome: <span class="str">"Zapani"</span>, nota: <span class="num">85</span>, aprovado: <span class="bool">true</span>,
+  <span class="fn">resumo</span>() { <span class="kw">return</span> <span class="str">`${this.nome} — ${this.nota}pts`</span>; } };
+<span class="kw">const</span> { nome, nota } = aluno;  <span class="cmt">// desestruturação</span>
+console.<span class="fn">log</span>(nome, nota);       <span class="cmt">// "Zapani" 85</span>
+console.<span class="fn">log</span>(aluno.<span class="fn">resumo</span>());  <span class="cmt">// "Zapani — 85pts"</span></code></pre></div>
+
+<div class="exercise"><div class="exercise-badge">📝 8.1</div><h4>Aprovados</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span><span class="star e">★</span> Básico</div><p>Dado array de alunos com nome e nota, use <code>filter</code> + <code>map</code> para obter só os nomes dos aprovados (nota ≥ 60).</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">alunos</span> = [{nome:<span class="str">"Ana"</span>,nota:<span class="num">75</span>},{nome:<span class="str">"Pedro"</span>,nota:<span class="num">45</span>},{nome:<span class="str">"Lia"</span>,nota:<span class="num">90</span>}];
+<span class="kw">const</span> <span class="const">aprovados</span> = alunos.<span class="fn">filter</span>(a => a.nota >= <span class="num">60</span>).<span class="fn">map</span>(a => a.nome);
+console.<span class="fn">log</span>(aprovados);  <span class="cmt">// ["Ana","Lia"]</span></code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 8.2</div><h4>Carrinho de Compras</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Array de produtos com nome, preco e qtd. Use <code>reduce</code> para calcular o total do pedido.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">cart</span> = [{nome:<span class="str">"Teclado"</span>,preco:<span class="num">150</span>,qtd:<span class="num">1</span>},{nome:<span class="str">"Mouse"</span>,preco:<span class="num">80</span>,qtd:<span class="num">2</span>},{nome:<span class="str">"Monitor"</span>,preco:<span class="num">900</span>,qtd:<span class="num">1</span>}];
+<span class="kw">const</span> <span class="const">total</span> = cart.<span class="fn">reduce</span>((acc,p) => acc + p.preco*p.qtd, <span class="num">0</span>);
+console.<span class="fn">log</span>(<span class="str">`🛒 Total: R$ ${total}`</span>);  <span class="cmt">// R$ 1210</span></code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 8.3</div><h4>Busca de Contato</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Array de contatos (nome, tel, email). Crie <code>buscar(nome)</code> com <code>find</code> que retorne o contato ou "não encontrado".</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">lista</span> = [{nome:<span class="str">"Ana"</span>,tel:<span class="str">"99999"</span>},{nome:<span class="str">"Bruno"</span>,tel:<span class="str">"88888"</span>}];
+<span class="kw">const</span> <span class="const">buscar</span> = nome => lista.<span class="fn">find</span>(c => c.nome.toLowerCase() === nome.toLowerCase()) ?? <span class="str">"Não encontrado"</span>;
+console.<span class="fn">log</span>(<span class="fn">buscar</span>(<span class="str">"Ana"</span>));    <span class="cmt">// objeto</span>
+console.<span class="fn">log</span>(<span class="fn">buscar</span>(<span class="str">"Carlos"</span>)); <span class="cmt">// Não encontrado</span></code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 8.4</div><h4>Ordenar por Preço</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Use <code>.sort()</code> para ordenar produtos do mais barato ao mais caro e liste formatado.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">prods</span> = [{nome:<span class="str">"Notebook"</span>,preco:<span class="num">3200</span>},{nome:<span class="str">"Fone"</span>,preco:<span class="num">120</span>},{nome:<span class="str">"Mouse"</span>,preco:<span class="num">80</span>}];
+prods.<span class="fn">sort</span>((a,b) => a.preco-b.preco).<span class="fn">forEach</span>((p,i) =>
+  console.<span class="fn">log</span>(<span class="str">`${i+1}. ${p.nome} — R$${p.preco}`</span>));</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 8.5</div><h4>Agrupar por Categoria</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span> Avançado</div><p>Use <code>reduce</code> para agrupar produtos por categoria num objeto: <code>{ periféricos: [...], computadores: [...] }</code>.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">itens</span> = [{nome:<span class="str">"Teclado"</span>,cat:<span class="str">"periféricos"</span>},{nome:<span class="str">"Mouse"</span>,cat:<span class="str">"periféricos"</span>},{nome:<span class="str">"Notebook"</span>,cat:<span class="str">"computadores"</span>}];
+<span class="kw">const</span> <span class="const">grupos</span> = itens.<span class="fn">reduce</span>((acc,item) => {
+  <span class="kw">if</span>(!acc[item.cat]) acc[item.cat] = [];
+  acc[item.cat].<span class="fn">push</span>(item.nome); <span class="kw">return</span> acc;
+}, {});
+console.<span class="fn">log</span>(grupos);</code></pre></div></div></div></div>
+</section>
+
+<!-- ===== MÓDULO 9 ===== -->
+<section class="section" id="s9">
+<div class="section-header"><span class="section-num">09</span><h2>Programação Assíncrona</h2></div>
+<div class="topic-intro"><div class="topic-intro-label">🗺 O que é este módulo?</div><h4>Fazer coisas sem travar o programa</h4><p>JavaScript executa uma coisa por vez, mas operações como buscar dados de APIs levam tempo. Async/await permite "pausar" elegantemente a execução enquanto espera — como fazer um pedido no restaurante sem travar o garçom.</p><ul><li><strong>async/await</strong> — forma moderna de código assíncrono</li><li><strong>Promise</strong> — representa uma operação futura</li><li><strong>fetch</strong> — buscar dados de APIs externas</li><li><strong>try/catch</strong> — tratar erros assíncronos</li></ul></div>
+<h3>9.1 — async / await com fetch</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code><span class="kw">async function</span> <span class="fn">buscarPost</span>(id) {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> <span class="const">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">`https://jsonplaceholder.typicode.com/posts/${id}`</span>);
+    <span class="kw">if</span> (!res.ok) <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">`HTTP ${res.status}`</span>);
+    <span class="kw">const</span> <span class="const">data</span> = <span class="kw">await</span> res.<span class="fn">json</span>();
+    console.<span class="fn">log</span>(data.title);
+  } <span class="kw">catch</span> (e) { console.<span class="fn">error</span>(<span class="str">"Erro:"</span>, e.message); }
+}
+<span class="fn">buscarPost</span>(<span class="num">1</span>);</code></pre></div>
+
+<div class="exercise"><div class="exercise-badge">📝 9.1</div><h4>Buscador de Usuário</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Busque o usuário id 1 em <code>jsonplaceholder.typicode.com/users/1</code> e exiba nome, email e empresa.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">async function</span> <span class="fn">buscar</span>(id) {
+  <span class="kw">const</span> <span class="const">u</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">`https://jsonplaceholder.typicode.com/users/${id}`</span>).<span class="fn">then</span>(r => r.<span class="fn">json</span>());
+  console.<span class="fn">log</span>(<span class="str">`👤 ${u.name} | 📧 ${u.email} | 🏢 ${u.company.name}`</span>);
+}
+<span class="fn">buscar</span>(<span class="num">1</span>);</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 9.2</div><h4>Promise Manual com setTimeout</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Crie <code>esperar(ms)</code> que retorna uma Promise que resolve após ms milissegundos. Use para pausar 2 segundos antes de uma mensagem.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">esperar</span> = ms => <span class="kw">new</span> <span class="fn">Promise</span>(r => <span class="fn">setTimeout</span>(r, ms));
+(<span class="kw">async</span> () => {
+  console.<span class="fn">log</span>(<span class="str">"Iniciando..."</span>);
+  <span class="kw">await</span> <span class="fn">esperar</span>(<span class="num">2000</span>);
+  console.<span class="fn">log</span>(<span class="str">"2 segundos depois! ⏰"</span>);
+})();</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 9.3</div><h4>Promise.all — Múltiplas Buscas</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span> Avançado</div><p>Busque os usuários de ids 1, 2 e 3 ao mesmo tempo com <code>Promise.all</code> e exiba os nomes de todos.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">async function</span> <span class="fn">buscarVarios</span>() {
+  <span class="kw">const</span> <span class="const">users</span> = <span class="kw">await</span> Promise.<span class="fn">all</span>(
+    [<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>].<span class="fn">map</span>(id => <span class="fn">fetch</span>(<span class="str">`https://jsonplaceholder.typicode.com/users/${id}`</span>).<span class="fn">then</span>(r=>r.<span class="fn">json</span>()))
+  );
+  users.<span class="fn">forEach</span>(u => console.<span class="fn">log</span>(<span class="str">`✅ ${u.name}`</span>));
+}
+<span class="fn">buscarVarios</span>();</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 9.4</div><h4>Tratamento de Erro</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Tente buscar uma URL inválida. Use try/catch para capturar o erro e exibir mensagem amigável com dados de fallback.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">async function</span> <span class="fn">buscarComFallback</span>() {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> <span class="const">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">"https://api.invalida.xyz"</span>);
+    <span class="kw">if</span>(!res.ok) <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">`HTTP ${res.status}`</span>);
+  } <span class="kw">catch</span>(e) {
+    console.<span class="fn">error</span>(<span class="str">`❌ ${e.message}`</span>);
+    console.<span class="fn">log</span>(<span class="str">"📦 Usando dados locais como fallback"</span>);
+  }
+}
+<span class="fn">buscarComFallback</span>();</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 9.5</div><h4>Cache de Requisições</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span> Avançado</div><p>Crie um cache em memória. A função <code>buscarComCache(url)</code> deve retornar do cache se já existir, senão faz a requisição e armazena.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">cache</span> = {};
+<span class="kw">async function</span> <span class="fn">buscarComCache</span>(url) {
+  <span class="kw">if</span>(cache[url]) { console.<span class="fn">log</span>(<span class="str">"📦 Do cache"</span>); <span class="kw">return</span> cache[url]; }
+  <span class="kw">const</span> <span class="const">data</span> = <span class="kw">await</span> <span class="fn">fetch</span>(url).<span class="fn">then</span>(r => r.<span class="fn">json</span>());
+  cache[url] = data; console.<span class="fn">log</span>(<span class="str">"🌐 Da rede"</span>); <span class="kw">return</span> data;
+}
+<span class="kw">const</span> <span class="const">url</span> = <span class="str">"https://jsonplaceholder.typicode.com/users/1"</span>;
+<span class="fn">buscarComCache</span>(url).<span class="fn">then</span>(() => <span class="fn">buscarComCache</span>(url));</code></pre></div></div></div></div>
+</section>
+
+<!-- ===== MÓDULO 10 ===== -->
+<section class="section" id="s10">
+<div class="section-header"><span class="section-num">10</span><h2>ES6+ JavaScript Moderno</h2></div>
+<div class="topic-intro"><div class="topic-intro-label">🗺 O que é este módulo?</div><h4>Recursos que todo dev JS usa no dia a dia</h4><p>ES6+ trouxe sintaxes muito mais elegantes ao JavaScript. Conhecer esses recursos é essencial para ler e escrever código profissional — é o que você vai ver em todo projeto real.</p><ul><li><strong>Desestruturação</strong> — extrair valores elegantemente</li><li><strong>Spread ...</strong> e <strong>Rest ...</strong></li><li><strong>Optional chaining ?.</strong> e <strong>Nullish ??</strong></li><li><strong>Map e Set</strong> — estruturas modernas</li></ul></div>
+<h3>10.1 — Desestruturação, Spread e Operadores Modernos</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code><span class="kw">const</span> { nome, cidade = <span class="str">"SP"</span> } = { nome: <span class="str">"Zapani"</span> };
+<span class="kw">const</span> [primeiro, ...resto] = [<span class="num">10</span>,<span class="num">20</span>,<span class="num">30</span>];  <span class="cmt">// 10, [20,30]</span>
+<span class="kw">const</span> <span class="const">merged</span> = [...[<span class="num">1</span>,<span class="num">2</span>], ...[<span class="num">3</span>,<span class="num">4</span>]];     <span class="cmt">// [1,2,3,4]</span>
+<span class="kw">const</span> <span class="const">user</span> = <span class="bool">null</span>;
+console.<span class="fn">log</span>(user?.nome);          <span class="cmt">// undefined — sem erro!</span>
+console.<span class="fn">log</span>(user?.nome ?? <span class="str">"Anon"</span>); <span class="cmt">// "Anon"</span></code></pre></div>
+
+<div class="exercise"><div class="exercise-badge">📝 10.1</div><h4>Troca sem Temp</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span><span class="star e">★</span> Básico</div><p>Troque <code>a=10</code> e <code>b=20</code> usando desestruturação, sem variável temporária.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">let</span> a = <span class="num">10</span>, b = <span class="num">20</span>;
+[a, b] = [b, a];
+console.<span class="fn">log</span>(a, b);  <span class="cmt">// 20 10</span></code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 10.2</div><h4>Clonar Objeto com Spread</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Dado um objeto <code>config</code>, crie <code>configProd</code> com spread que copia tudo mas sobrescreve <code>debug: false</code>.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">config</span>    = {host:<span class="str">"localhost"</span>,porta:<span class="num">3000</span>,debug:<span class="bool">true</span>};
+<span class="kw">const</span> <span class="const">configProd</span> = {...config, debug:<span class="bool">false</span>};
+console.<span class="fn">log</span>(configProd);</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 10.3</div><h4>Optional Chaining Seguro</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Array de usuários onde alguns não têm <code>endereco</code>. Use <code>?.</code> e <code>??</code> para exibir a cidade sem causar erros.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">users</span> = [{nome:<span class="str">"Ana"</span>,end:{cidade:<span class="str">"SP"</span>}},{nome:<span class="str">"Bruno"</span>,end:<span class="bool">null</span>},{nome:<span class="str">"Carla"</span>}];
+users.<span class="fn">forEach</span>(u => console.<span class="fn">log</span>(<span class="str">`${u.nome}: ${u?.end?.cidade ?? "Não informada"}`</span>));</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 10.4</div><h4>Arrays Únicos com Set</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Mescle dois arrays de tags removendo duplicatas usando spread + Set.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">unicas</span> = [...<span class="kw">new</span> <span class="fn">Set</span>([...[<span class="str">"js"</span>,<span class="str">"html"</span>,<span class="str">"css"</span>], ...[<span class="str">"css"</span>,<span class="str">"python"</span>,<span class="str">"js"</span>]])];
+console.<span class="fn">log</span>(unicas);  <span class="cmt">// ["js","html","css","python"]</span></code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 10.5</div><h4>Contador com Map</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span> Avançado</div><p>Use <code>Map</code> para contar quantas vezes cada palavra aparece em <code>["js","py","js","ts","py","js"]</code>.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">m</span> = <span class="kw">new</span> <span class="fn">Map</span>();
+<span class="kw">for</span> (<span class="kw">const</span> <span class="const">p</span> <span class="kw">of</span> [<span class="str">"js"</span>,<span class="str">"py"</span>,<span class="str">"js"</span>,<span class="str">"ts"</span>,<span class="str">"py"</span>,<span class="str">"js"</span>]) m.<span class="fn">set</span>(p, (m.<span class="fn">get</span>(p)??<span class="num">0</span>)+<span class="num">1</span>);
+<span class="kw">for</span> (<span class="kw">const</span> [k,v] <span class="kw">of</span> m) console.<span class="fn">log</span>(<span class="str">`${k}: ${v}x`</span>);
+<span class="cmt">// js:3x | py:2x | ts:1x</span></code></pre></div></div></div></div>
+</section>
+
+<!-- ===== MÓDULO 11 ===== -->
+<section class="section" id="s11">
+<div class="section-header"><span class="section-num">11</span><h2>Node.js &amp; APIs REST</h2></div>
+<div class="topic-intro"><div class="topic-intro-label">🗺 O que é este módulo?</div><h4>Criar servidores e APIs com JavaScript</h4><p>Com Node.js e Express você constrói o backend — o servidor que recebe requisições HTTP e retorna respostas. APIs REST são o padrão universal de comunicação entre sistemas, e é o que todo app moderno usa.</p><ul><li><strong>Express</strong> — framework web minimalista e poderoso</li><li><strong>Rotas</strong> — GET, POST, PUT, DELETE</li><li><strong>Middlewares</strong> — camadas de processamento</li><li><strong>Instalação:</strong> <code>npm install express</code></li></ul></div>
+<h3>11.1 — Servidor Express com CRUD</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript — server.js</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code><span class="kw">const</span> <span class="const">express</span> = <span class="fn">require</span>(<span class="str">"express"</span>);
+<span class="kw">const</span> <span class="const">app</span> = <span class="fn">express</span>();
+app.<span class="fn">use</span>(express.<span class="fn">json</span>());
+<span class="kw">let</span> produtos = [{id:<span class="num">1</span>,nome:<span class="str">"Teclado"</span>,preco:<span class="num">150</span>},{id:<span class="num">2</span>,nome:<span class="str">"Mouse"</span>,preco:<span class="num">80</span>}];
+
+app.<span class="fn">get</span>(<span class="str">"/produtos"</span>, (req,res) => res.<span class="fn">json</span>(produtos));
+app.<span class="fn">get</span>(<span class="str">"/produtos/:id"</span>, (req,res) => {
+  <span class="kw">const</span> <span class="const">p</span> = produtos.<span class="fn">find</span>(p => p.id === +req.params.id);
+  p ? res.<span class="fn">json</span>(p) : res.<span class="fn">status</span>(<span class="num">404</span>).<span class="fn">json</span>({erro:<span class="str">"Não encontrado"</span>});
+});
+app.<span class="fn">post</span>(<span class="str">"/produtos"</span>, (req,res) => {
+  <span class="kw">const</span> <span class="const">novo</span> = {id: Date.<span class="fn">now</span>(), ...req.body};
+  produtos.<span class="fn">push</span>(novo); res.<span class="fn">status</span>(<span class="num">201</span>).<span class="fn">json</span>(novo);
+});
+app.<span class="fn">delete</span>(<span class="str">"/produtos/:id"</span>, (req,res) => {
+  produtos = produtos.<span class="fn">filter</span>(p => p.id !== +req.params.id);
+  res.<span class="fn">json</span>({ok:<span class="bool">true</span>});
+});
+app.<span class="fn">listen</span>(<span class="num">3000</span>, () => console.<span class="fn">log</span>(<span class="str">"🚀 API em http://localhost:3000"</span>));</code></pre></div>
+
+<div class="exercise"><div class="exercise-badge">📝 11.1</div><h4>Rota de Status</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span><span class="star e">★</span> Básico</div><p>Adicione <code>GET /status</code> que retorne <code>{ online: true, api: "nome", data: timestamp }</code>.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code>app.<span class="fn">get</span>(<span class="str">"/status"</span>, (req,res) =>
+  res.<span class="fn">json</span>({online:<span class="bool">true</span>, api:<span class="str">"Zapani's API"</span>, data:<span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toISOString</span>()}));</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 11.2</div><h4>Middleware de Log</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Crie um middleware com <code>app.use()</code> que logue método + URL + timestamp de cada requisição.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code>app.<span class="fn">use</span>((req,res,next) => {
+  console.<span class="fn">log</span>(<span class="str">`[${<span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toLocaleTimeString</span>()}] ${req.method} ${req.url}`</span>);
+  <span class="fn">next</span>();
+});</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 11.3</div><h4>Rota PUT — Atualizar</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Implemente <code>PUT /produtos/:id</code> que atualiza os dados de um produto. Retorne 404 se não encontrar.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code>app.<span class="fn">put</span>(<span class="str">"/produtos/:id"</span>, (req,res) => {
+  <span class="kw">const</span> <span class="const">i</span> = produtos.<span class="fn">findIndex</span>(p => p.id === +req.params.id);
+  <span class="kw">if</span>(i===-<span class="num">1</span>) <span class="kw">return</span> res.<span class="fn">status</span>(<span class="num">404</span>).<span class="fn">json</span>({erro:<span class="str">"Não encontrado"</span>});
+  produtos[i] = {...produtos[i], ...req.body};
+  res.<span class="fn">json</span>(produtos[i]);
+});</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 11.4</div><h4>Filtro por Query String</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span> Avançado</div><p>Modifique <code>GET /produtos</code> para aceitar <code>?precoMax=100</code> e filtrar produtos por preço máximo.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code>app.<span class="fn">get</span>(<span class="str">"/produtos"</span>, (req,res) => {
+  <span class="kw">const</span> {precoMax} = req.query;
+  res.<span class="fn">json</span>(precoMax ? produtos.<span class="fn">filter</span>(p => p.preco <= +precoMax) : produtos);
+});</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 11.5</div><h4>Validação no POST</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span> Avançado</div><p>No <code>POST /produtos</code> valide: nome deve ser string não vazia e preco deve ser número positivo. Retorne erro 400 descritivo se falhar.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code>app.<span class="fn">post</span>(<span class="str">"/produtos"</span>, (req,res) => {
+  <span class="kw">const</span> {nome,preco} = req.body;
+  <span class="kw">if</span>(!nome||<span class="kw">typeof</span> nome!==<span class="str">"string"</span>) <span class="kw">return</span> res.<span class="fn">status</span>(<span class="num">400</span>).<span class="fn">json</span>({erro:<span class="str">"'nome' obrigatório"</span>});
+  <span class="kw">if</span>(!preco||<span class="kw">typeof</span> preco!==<span class="str">"number"</span>||preco<=<span class="num">0</span>) <span class="kw">return</span> res.<span class="fn">status</span>(<span class="num">400</span>).<span class="fn">json</span>({erro:<span class="str">"'preco' deve ser positivo"</span>});
+  <span class="kw">const</span> <span class="const">novo</span> = {id:Date.<span class="fn">now</span>(),nome,preco};
+  produtos.<span class="fn">push</span>(novo); res.<span class="fn">status</span>(<span class="num">201</span>).<span class="fn">json</span>(novo);
+});</code></pre></div></div></div></div>
+</section>
+
+<!-- ===== MÓDULO 12 ===== -->
+<section class="section" id="s12">
+<div class="section-header"><span class="section-num">12</span><h2>Banco de Dados com SQLite</h2></div>
+<div class="topic-intro"><div class="topic-intro-label">🗺 O que é este módulo?</div><h4>Persistir dados de verdade no disco</h4><p>Dados na memória somem ao reiniciar o servidor. Um banco de dados grava no disco. SQLite é o banco ideal para começar — é um único arquivo <code>.db</code> na sua pasta, sem instalar nada extra no Windows. Basta instalar a biblioteca e começar.</p><ul><li><strong>SQLite</strong> — banco em arquivo, zero configuração</li><li><strong>better-sqlite3</strong> — biblioteca Node para SQLite</li><li><strong>SQL:</strong> CREATE TABLE, INSERT, SELECT, UPDATE, DELETE, JOIN</li></ul></div>
+<h3>12.1 — Setup e CRUD Básico</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">cmd</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code>npm install better-sqlite3</code></pre></div>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript — db.js</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code><span class="kw">const</span> <span class="const">Database</span> = <span class="fn">require</span>(<span class="str">"better-sqlite3"</span>);
+<span class="kw">const</span> <span class="const">db</span> = <span class="kw">new</span> <span class="fn">Database</span>(<span class="str">"loja.db"</span>);
+
+db.<span class="fn">exec</span>(<span class="str">`CREATE TABLE IF NOT EXISTS produtos (
+  id    INTEGER PRIMARY KEY AUTOINCREMENT,
+  nome  TEXT    NOT NULL,
+  preco REAL    NOT NULL
+)`</span>);
+
+<span class="cmt">// INSERT</span>
+db.<span class="fn">prepare</span>(<span class="str">"INSERT INTO produtos(nome,preco) VALUES(?,?)"</span>).<span class="fn">run</span>(<span class="str">"Teclado"</span>, <span class="num">150</span>);
+<span class="cmt">// SELECT</span>
+<span class="kw">const</span> <span class="const">todos</span> = db.<span class="fn">prepare</span>(<span class="str">"SELECT * FROM produtos"</span>).<span class="fn">all</span>();
+console.<span class="fn">log</span>(todos);</code></pre></div>
+
+<div class="exercise"><div class="exercise-badge">📝 12.1</div><h4>CRUD Completo de Clientes</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Crie tabela <code>clientes</code> (id, nome, email). Insira 3, liste todos, atualize o email do id 1, delete o id 2, liste novamente.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">db</span> = <span class="kw">new</span> (<span class="fn">require</span>(<span class="str">"better-sqlite3"</span>))(<span class="str">"cli.db"</span>);
+db.<span class="fn">exec</span>(<span class="str">"CREATE TABLE IF NOT EXISTS clientes(id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT)"</span>);
+<span class="kw">const</span> <span class="const">ins</span> = db.<span class="fn">prepare</span>(<span class="str">"INSERT INTO clientes(nome,email) VALUES(?,?)"</span>);
+ins.<span class="fn">run</span>(<span class="str">"Ana"</span>,<span class="str">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5f3e313e1f323e3633713c3032">[email&#160;protected]</a>"</span>); ins.<span class="fn">run</span>(<span class="str">"Bruno"</span>,<span class="str">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="adcfedc0ccc4c183cec2c0">[email&#160;protected]</a>"</span>); ins.<span class="fn">run</span>(<span class="str">"Carla"</span>,<span class="str">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4724072a262e2b6924282a">[email&#160;protected]</a>"</span>);
+db.<span class="fn">prepare</span>(<span class="str">"UPDATE clientes SET email=? WHERE id=?"</span>).<span class="fn">run</span>(<span class="str">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ea8b848bd8aa878b8386c4898587">[email&#160;protected]</a>"</span>,<span class="num">1</span>);
+db.<span class="fn">prepare</span>(<span class="str">"DELETE FROM clientes WHERE id=?"</span>).<span class="fn">run</span>(<span class="num">2</span>);
+console.<span class="fn">log</span>(db.<span class="fn">prepare</span>(<span class="str">"SELECT * FROM clientes"</span>).<span class="fn">all</span>());</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 12.2</div><h4>API + SQLite</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span> Avançado</div><p>Conecte Express ao SQLite: <code>GET /clientes</code> busca do banco, <code>POST /clientes</code> insere, <code>DELETE /clientes/:id</code> remove.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">express</span> = <span class="fn">require</span>(<span class="str">"express"</span>), <span class="const">DB</span> = <span class="fn">require</span>(<span class="str">"better-sqlite3"</span>);
+<span class="kw">const</span> <span class="const">app</span> = <span class="fn">express</span>(), db = <span class="kw">new</span> <span class="fn">DB</span>(<span class="str">"cli.db"</span>);
+app.<span class="fn">use</span>(express.<span class="fn">json</span>());
+app.<span class="fn">get</span>(<span class="str">"/clientes"</span>, (_,res) => res.<span class="fn">json</span>(db.<span class="fn">prepare</span>(<span class="str">"SELECT * FROM clientes"</span>).<span class="fn">all</span>()));
+app.<span class="fn">post</span>(<span class="str">"/clientes"</span>, (req,res) => {
+  <span class="kw">const</span> {nome,email} = req.body;
+  <span class="kw">const</span> <span class="const">r</span> = db.<span class="fn">prepare</span>(<span class="str">"INSERT INTO clientes(nome,email) VALUES(?,?)"</span>).<span class="fn">run</span>(nome,email);
+  res.<span class="fn">status</span>(<span class="num">201</span>).<span class="fn">json</span>({id:r.lastInsertRowid,nome,email});
+});
+app.<span class="fn">delete</span>(<span class="str">"/clientes/:id"</span>, (req,res) => {
+  db.<span class="fn">prepare</span>(<span class="str">"DELETE FROM clientes WHERE id=?"</span>).<span class="fn">run</span>(req.params.id);
+  res.<span class="fn">json</span>({ok:<span class="bool">true</span>});
+});
+app.<span class="fn">listen</span>(<span class="num">3000</span>);</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 12.3</div><h4>Busca com WHERE</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span><span class="star e">★</span> Intermediário</div><p>Na tabela <code>produtos</code>, implemente <code>GET /produtos?cat=periféricos</code> que filtra por categoria usando SQL WHERE.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code>app.<span class="fn">get</span>(<span class="str">"/produtos"</span>, (req,res) => {
+  <span class="kw">const</span> {cat} = req.query;
+  <span class="kw">const</span> <span class="const">sql</span> = cat
+    ? <span class="str">"SELECT * FROM produtos WHERE categoria=?"</span>
+    : <span class="str">"SELECT * FROM produtos"</span>;
+  res.<span class="fn">json</span>(db.<span class="fn">prepare</span>(sql).<span class="fn">all</span>(...(cat ? [cat] : [])));
+});</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 12.4</div><h4>JOIN entre Tabelas</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star e">★</span> Avançado</div><p>Com tabelas <code>pedidos</code> e <code>clientes</code>, crie uma rota que retorne pedidos com o nome do cliente usando JOIN SQL.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code>app.<span class="fn">get</span>(<span class="str">"/pedidos"</span>, (_,res) => {
+  <span class="kw">const</span> <span class="const">rows</span> = db.<span class="fn">prepare</span>(<span class="str">`
+    SELECT p.id, p.total, c.nome AS cliente
+    FROM pedidos p
+    JOIN clientes c ON p.cliente_id = c.id
+  `</span>).<span class="fn">all</span>();
+  res.<span class="fn">json</span>(rows);
+});</code></pre></div></div></div></div>
+
+<div class="exercise"><div class="exercise-badge">📝 12.5</div><h4>Transações SQL</h4><div class="difficulty"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span> Expert</div><p>Use transações do better-sqlite3 para inserir um pedido e seus itens atomicamente — se qualquer operação falhar, tudo é revertido.</p><div class="answer-toggle"><button class="show-answer-btn" onclick="toggleAnswer(this)"><span>🔒</span> Ver Resposta</button><div class="answer-content"><div class="code-block" style="margin-top:.5rem"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript</span></div><pre><code><span class="kw">const</span> <span class="const">criarPedido</span> = db.<span class="fn">transaction</span>((clienteId, itens) => {
+  <span class="kw">const</span> <span class="const">pedido</span> = db.<span class="fn">prepare</span>(<span class="str">"INSERT INTO pedidos(cliente_id) VALUES(?)"</span>).<span class="fn">run</span>(clienteId);
+  <span class="kw">const</span> <span class="const">insItem</span> = db.<span class="fn">prepare</span>(<span class="str">"INSERT INTO itens(pedido_id,produto_id,qtd) VALUES(?,?,?)"</span>);
+  <span class="kw">for</span> (<span class="kw">const</span> <span class="const">item</span> <span class="kw">of</span> itens) insItem.<span class="fn">run</span>(pedido.lastInsertRowid, item.produtoId, item.qtd);
+  <span class="kw">return</span> pedido.lastInsertRowid;
+});
+<span class="cmt">// Uso: criarPedido(1, [{produtoId:2,qtd:3},{produtoId:5,qtd:1}])</span></code></pre></div></div></div></div>
+</section>
+
+<!-- ===== PROJETO FINAL ===== -->
+<section class="section" id="projeto">
+<div class="section-header"><span class="section-num">🏆</span><h2>Projeto Final — TaskMaster Pro</h2></div>
+
+<div class="project-box">
+  <div class="project-badge">🎯 Projeto Final Orientado</div>
+  <div class="project-title">TaskMaster Pro</div>
+  <div class="project-sub">Uma API REST completa de gerenciamento de tarefas com autenticação, categorias, prioridades e banco de dados SQLite — construída do zero com Node.js e Express.</div>
+
+  <div class="feat-grid">
+    <div class="feat-item"><span>👤</span> Cadastro e login de usuários</div>
+    <div class="feat-item"><span>📋</span> CRUD completo de tarefas</div>
+    <div class="feat-item"><span>🏷</span> Categorias e prioridades</div>
+    <div class="feat-item"><span>🔐</span> Middleware de autenticação</div>
+    <div class="feat-item"><span>🔍</span> Filtros e busca por texto</div>
+    <div class="feat-item"><span>📊</span> Estatísticas do usuário</div>
+    <div class="feat-item"><span>🗄</span> Banco SQLite persistente</div>
+    <div class="feat-item"><span>✅</span> Validação de entrada completa</div>
+  </div>
+</div>
+
+<h3>Passo 1 — Estrutura e Dependências</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">cmd</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code>mkdir taskmaster-pro
+cd taskmaster-pro
+npm init -y
+npm install express better-sqlite3</code></pre></div>
+
+<h3>Passo 2 — Banco de Dados (db.js)</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript — db.js</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code><span class="kw">const</span> <span class="const">Database</span> = <span class="fn">require</span>(<span class="str">"better-sqlite3"</span>);
+<span class="kw">const</span> <span class="const">db</span> = <span class="kw">new</span> <span class="fn">Database</span>(<span class="str">"taskmaster.db"</span>);
+db.<span class="fn">pragma</span>(<span class="str">"foreign_keys = ON"</span>);
+
+db.<span class="fn">exec</span>(<span class="str">`
+  CREATE TABLE IF NOT EXISTS usuarios (
+    id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome     TEXT    NOT NULL,
+    email    TEXT    UNIQUE NOT NULL,
+    senha    TEXT    NOT NULL,
+    criado   TEXT    DEFAULT (datetime('now'))
+  );
+
+  CREATE TABLE IF NOT EXISTS tarefas (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    titulo     TEXT    NOT NULL,
+    descricao  TEXT,
+    concluida  INTEGER DEFAULT 0,
+    prioridade TEXT    DEFAULT 'media',
+    categoria  TEXT    DEFAULT 'geral',
+    usuario_id INTEGER REFERENCES usuarios(id),
+    criado     TEXT    DEFAULT (datetime('now'))
+  );
+`</span>);
+
+module.exports = db;</code></pre></div>
+
+<h3>Passo 3 — Middleware de Autenticação (auth.js)</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript — auth.js</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code><span class="cmt">// Simulação simples de sessão por token (sem JWT para manter didático)</span>
+<span class="kw">const</span> <span class="const">sessoes</span> = <span class="kw">new</span> <span class="fn">Map</span>();
+
+<span class="kw">function</span> <span class="fn">criarToken</span>(userId) {
+  <span class="kw">const</span> <span class="const">token</span> = Math.<span class="fn">random</span>().<span class="fn">toString</span>(<span class="num">36</span>).<span class="fn">slice</span>(<span class="num">2</span>);
+  sessoes.<span class="fn">set</span>(token, userId);
+  <span class="kw">return</span> token;
+}
+
+<span class="kw">function</span> <span class="fn">autenticar</span>(req, res, next) {
+  <span class="kw">const</span> <span class="const">token</span> = req.headers[<span class="str">"x-token"</span>];
+  <span class="kw">if</span> (!token || !sessoes.<span class="fn">has</span>(token))
+    <span class="kw">return</span> res.<span class="fn">status</span>(<span class="num">401</span>).<span class="fn">json</span>({ erro: <span class="str">"Não autenticado. Faça login primeiro."</span> });
+  req.userId = sessoes.<span class="fn">get</span>(token);
+  <span class="fn">next</span>();
+}
+
+module.exports = { criarToken, autenticar };</code></pre></div>
+
+<h3>Passo 4 — Servidor Principal (server.js)</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">javascript — server.js</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code><span class="kw">const</span> <span class="const">express</span>              = <span class="fn">require</span>(<span class="str">"express"</span>);
+<span class="kw">const</span> <span class="const">db</span>                   = <span class="fn">require</span>(<span class="str">"./db"</span>);
+<span class="kw">const</span> { criarToken, autenticar } = <span class="fn">require</span>(<span class="str">"./auth"</span>);
+<span class="kw">const</span> <span class="const">app</span>                  = <span class="fn">express</span>();
+
+app.<span class="fn">use</span>(express.<span class="fn">json</span>());
+
+<span class="cmt">// ── LOG ──────────────────────────────────────────────────</span>
+app.<span class="fn">use</span>((req,_,next) => {
+  console.<span class="fn">log</span>(<span class="str">`[${<span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toLocaleTimeString</span>()}] ${req.method} ${req.url}`</span>);
+  <span class="fn">next</span>();
+});
+
+<span class="cmt">// ── USUÁRIOS ──────────────────────────────────────────────</span>
+app.<span class="fn">post</span>(<span class="str">"/registrar"</span>, (req, res) => {
+  <span class="kw">const</span> { nome, email, senha } = req.body;
+  <span class="kw">if</span> (!nome || !email || !senha)
+    <span class="kw">return</span> res.<span class="fn">status</span>(<span class="num">400</span>).<span class="fn">json</span>({ erro: <span class="str">"nome, email e senha são obrigatórios"</span> });
+  <span class="kw">try</span> {
+    <span class="kw">const</span> <span class="const">r</span> = db.<span class="fn">prepare</span>(<span class="str">"INSERT INTO usuarios(nome,email,senha) VALUES(?,?,?)"</span>).<span class="fn">run</span>(nome, email, senha);
+    res.<span class="fn">status</span>(<span class="num">201</span>).<span class="fn">json</span>({ id: r.lastInsertRowid, nome, email });
+  } <span class="kw">catch</span>(e) { res.<span class="fn">status</span>(<span class="num">400</span>).<span class="fn">json</span>({ erro: <span class="str">"Email já cadastrado"</span> }); }
+});
+
+app.<span class="fn">post</span>(<span class="str">"/login"</span>, (req, res) => {
+  <span class="kw">const</span> { email, senha } = req.body;
+  <span class="kw">const</span> <span class="const">u</span> = db.<span class="fn">prepare</span>(<span class="str">"SELECT * FROM usuarios WHERE email=? AND senha=?"</span>).<span class="fn">get</span>(email, senha);
+  <span class="kw">if</span> (!u) <span class="kw">return</span> res.<span class="fn">status</span>(<span class="num">401</span>).<span class="fn">json</span>({ erro: <span class="str">"Email ou senha incorretos"</span> });
+  res.<span class="fn">json</span>({ token: <span class="fn">criarToken</span>(u.id), nome: u.nome });
+});
+
+<span class="cmt">// ── TAREFAS (requer autenticação) ─────────────────────────</span>
+app.<span class="fn">get</span>(<span class="str">"/tarefas"</span>, autenticar, (req, res) => {
+  <span class="kw">const</span> { cat, prio, busca, concluida } = req.query;
+  <span class="kw">let</span> sql = <span class="str">"SELECT * FROM tarefas WHERE usuario_id=?"</span>;
+  <span class="kw">const</span> <span class="const">params</span> = [req.userId];
+  <span class="kw">if</span> (cat)      { sql += <span class="str">" AND categoria=?"</span>;          params.<span class="fn">push</span>(cat); }
+  <span class="kw">if</span> (prio)     { sql += <span class="str">" AND prioridade=?"</span>;         params.<span class="fn">push</span>(prio); }
+  <span class="kw">if</span> (busca)    { sql += <span class="str">" AND titulo LIKE ?"</span>;         params.<span class="fn">push</span>(<span class="str">`%${busca}%`</span>); }
+  <span class="kw">if</span> (concluida !== undefined) { sql += <span class="str">" AND concluida=?"</span>; params.<span class="fn">push</span>(concluida === <span class="str">"1"</span> ? <span class="num">1</span> : <span class="num">0</span>); }
+  sql += <span class="str">" ORDER BY criado DESC"</span>;
+  res.<span class="fn">json</span>(db.<span class="fn">prepare</span>(sql).<span class="fn">all</span>(...params));
+});
+
+app.<span class="fn">post</span>(<span class="str">"/tarefas"</span>, autenticar, (req, res) => {
+  <span class="kw">const</span> { titulo, descricao, prioridade = <span class="str">"media"</span>, categoria = <span class="str">"geral"</span> } = req.body;
+  <span class="kw">if</span> (!titulo) <span class="kw">return</span> res.<span class="fn">status</span>(<span class="num">400</span>).<span class="fn">json</span>({ erro: <span class="str">"'titulo' é obrigatório"</span> });
+  <span class="kw">if</span> (![<span class="str">"baixa"</span>,<span class="str">"media"</span>,<span class="str">"alta"</span>].<span class="fn">includes</span>(prioridade))
+    <span class="kw">return</span> res.<span class="fn">status</span>(<span class="num">400</span>).<span class="fn">json</span>({ erro: <span class="str">"prioridade: baixa | media | alta"</span> });
+  <span class="kw">const</span> <span class="const">r</span> = db.<span class="fn">prepare</span>(<span class="str">"INSERT INTO tarefas(titulo,descricao,prioridade,categoria,usuario_id) VALUES(?,?,?,?,?)"</span>)
+              .<span class="fn">run</span>(titulo, descricao||<span class="str">""</span>, prioridade, categoria, req.userId);
+  res.<span class="fn">status</span>(<span class="num">201</span>).<span class="fn">json</span>({ id: r.lastInsertRowid, titulo, prioridade, categoria });
+});
+
+app.<span class="fn">put</span>(<span class="str">"/tarefas/:id"</span>, autenticar, (req, res) => {
+  <span class="kw">const</span> <span class="const">t</span> = db.<span class="fn">prepare</span>(<span class="str">"SELECT * FROM tarefas WHERE id=? AND usuario_id=?"</span>).<span class="fn">get</span>(req.params.id, req.userId);
+  <span class="kw">if</span> (!t) <span class="kw">return</span> res.<span class="fn">status</span>(<span class="num">404</span>).<span class="fn">json</span>({ erro: <span class="str">"Tarefa não encontrada"</span> });
+  <span class="kw">const</span> { titulo, descricao, concluida, prioridade, categoria } = req.body;
+  db.<span class="fn">prepare</span>(<span class="str">"UPDATE tarefas SET titulo=?,descricao=?,concluida=?,prioridade=?,categoria=? WHERE id=?"</span>)
+    .<span class="fn">run</span>(titulo??t.titulo, descricao??t.descricao, concluida??t.concluida, prioridade??t.prioridade, categoria??t.categoria, t.id);
+  res.<span class="fn">json</span>(db.<span class="fn">prepare</span>(<span class="str">"SELECT * FROM tarefas WHERE id=?"</span>).<span class="fn">get</span>(t.id));
+});
+
+app.<span class="fn">delete</span>(<span class="str">"/tarefas/:id"</span>, autenticar, (req, res) => {
+  <span class="kw">const</span> <span class="const">r</span> = db.<span class="fn">prepare</span>(<span class="str">"DELETE FROM tarefas WHERE id=? AND usuario_id=?"</span>).<span class="fn">run</span>(req.params.id, req.userId);
+  r.changes ? res.<span class="fn">json</span>({ ok: <span class="bool">true</span> }) : res.<span class="fn">status</span>(<span class="num">404</span>).<span class="fn">json</span>({ erro: <span class="str">"Não encontrada"</span> });
+});
+
+<span class="cmt">// ── ESTATÍSTICAS ──────────────────────────────────────────</span>
+app.<span class="fn">get</span>(<span class="str">"/stats"</span>, autenticar, (req, res) => {
+  <span class="kw">const</span> <span class="const">uid</span> = req.userId;
+  res.<span class="fn">json</span>({
+    total:     db.<span class="fn">prepare</span>(<span class="str">"SELECT COUNT(*) AS n FROM tarefas WHERE usuario_id=?"</span>).<span class="fn">get</span>(uid).n,
+    concluidas:db.<span class="fn">prepare</span>(<span class="str">"SELECT COUNT(*) AS n FROM tarefas WHERE usuario_id=? AND concluida=1"</span>).<span class="fn">get</span>(uid).n,
+    pendentes: db.<span class="fn">prepare</span>(<span class="str">"SELECT COUNT(*) AS n FROM tarefas WHERE usuario_id=? AND concluida=0"</span>).<span class="fn">get</span>(uid).n,
+    porCategoria: db.<span class="fn">prepare</span>(<span class="str">"SELECT categoria, COUNT(*) AS qtd FROM tarefas WHERE usuario_id=? GROUP BY categoria"</span>).<span class="fn">all</span>(uid)
+  });
+});
+
+app.<span class="fn">listen</span>(<span class="num">3000</span>, () => {
+  console.<span class="fn">log</span>(<span class="str">"🚀 TaskMaster Pro rodando em http://localhost:3000"</span>);
+  console.<span class="fn">log</span>(<span class="str">"📋 Endpoints disponíveis:"</span>);
+  console.<span class="fn">log</span>(<span class="str">"   POST   /registrar  — cadastrar usuário"</span>);
+  console.<span class="fn">log</span>(<span class="str">"   POST   /login       — fazer login"</span>);
+  console.<span class="fn">log</span>(<span class="str">"   GET    /tarefas     — listar (com filtros)"</span>);
+  console.<span class="fn">log</span>(<span class="str">"   POST   /tarefas     — criar tarefa"</span>);
+  console.<span class="fn">log</span>(<span class="str">"   PUT    /tarefas/:id — atualizar"</span>);
+  console.<span class="fn">log</span>(<span class="str">"   DELETE /tarefas/:id — remover"</span>);
+  console.<span class="fn">log</span>(<span class="str">"   GET    /stats       — estatísticas"</span>);
+});</code></pre></div>
+
+<h3>Passo 5 — Testando a API</h3>
+<div class="callout tip"><span class="callout-icon">💡</span><div>Instale a extensão <strong>REST Client</strong> no VSCode e crie um arquivo <code>test.http</code>. Ou use o <strong>Postman</strong> / <strong>Insomnia</strong> — ferramentas gratuitas para testar APIs visualmente.</div></div>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">http — test.http (REST Client no VSCode)</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code><span class="cmt">### 1. Registrar usuário</span>
+POST http://localhost:3000/registrar
+Content-Type: application/json
+
+{ "nome": "Zapani", "email": "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f8829988999691b895999194d69b9795">[email&#160;protected]</a>", "senha": "minhasenha" }
+
+<span class="cmt">### 2. Login (copie o token retornado!)</span>
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{ "email": "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f2889382939c9bb29f939b9edc919d9f">[email&#160;protected]</a>", "senha": "minhasenha" }
+
+<span class="cmt">### 3. Criar tarefa (substitua SEU_TOKEN pelo token do login)</span>
+POST http://localhost:3000/tarefas
+Content-Type: application/json
+x-token: SEU_TOKEN
+
+{ "titulo": "Estudar JS", "prioridade": "alta", "categoria": "estudos" }
+
+<span class="cmt">### 4. Listar tarefas com filtro</span>
+GET http://localhost:3000/tarefas?cat=estudos&busca=JS
+x-token: SEU_TOKEN
+
+<span class="cmt">### 5. Estatísticas</span>
+GET http://localhost:3000/stats
+x-token: SEU_TOKEN</code></pre></div>
+
+<div class="callout info"><span class="callout-icon">🏆</span><div><strong>Parabéns! Você construiu uma API REST completa</strong> com autenticação, CRUD, filtros, busca e estatísticas — usando todos os conceitos dos 12 módulos: variáveis, funções, arrays, objetos, async, ES6+, Node.js, Express e SQLite.</div></div>
+
+<h3>Passo 6 — Frontend (taskmaster-front.html)</h3>
+<p>Salve o arquivo abaixo como <code>taskmaster-front.html</code> na mesma pasta do projeto e abra no navegador com o servidor rodando.</p>
+
+<div class="topic-intro" style="margin-bottom:1.5rem">
+  <div class="topic-intro-label">🖥 O que o frontend faz</div>
+  <h4>Interface completa conectada à sua API</h4>
+  <ul>
+    <li>Tela de <strong>login e registro</strong> que chama <code>POST /login</code> e <code>POST /registrar</code></li>
+    <li><strong>Dashboard</strong> com stats (total, feitas, abertas, urgentes)</li>
+    <li><strong>Lista de tarefas</strong> com filtros, busca, editar, concluir e deletar</li>
+    <li><strong>Modal</strong> para criar e editar tarefas com prioridade e categoria</li>
+    <li>Tudo conectado via <code>fetch()</code> à API em <code>localhost:3000</code></li>
+  </ul>
+</div>
+
+<!-- FRONTEND EMBUTIDO -->
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-lang">html — taskmaster-front.html</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="pt-BR"&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+&lt;title&gt;TaskMaster Pro&lt;/title&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&amp;family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"&gt;
+&lt;style&gt;
+:root{--bg:#08090d;--surface:#0f1117;--surface2:#161821;--border:#1f2333;--border2:#2a2f45;--accent:#5b6af5;--accent-glow:rgba(91,106,245,0.25);--accent2:#f5a623;--accent3:#2dd4a0;--red:#f55b5b;--text:#e8eaf6;--text-dim:#8b90b0;--text-muted:#4a5070;--mono:'DM Mono',monospace;--sans:'Outfit',sans-serif;--radius:12px;--shadow:0 8px 32px rgba(0,0,0,0.5);}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 20% 10%,rgba(91,106,245,.07),transparent),radial-gradient(ellipse 40% 40% at 80% 80%,rgba(45,212,160,.05),transparent);pointer-events:none;z-index:0;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+#auth-screen{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:1rem;}
+.auth-card{width:100%;max-width:420px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2.5rem;position:relative;overflow:hidden;}
+.auth-card::before{content:'';position:absolute;top:-60px;right:-60px;width:180px;height:180px;background:radial-gradient(circle,rgba(91,106,245,.2),transparent 70%);pointer-events:none;}
+.auth-logo{display:flex;align-items:center;gap:.75rem;margin-bottom:2rem;}
+.auth-logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--accent),#7b8af8);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+.auth-logo-text{font-family:var(--sans);font-size:1.2rem;font-weight:700;color:var(--text);}
+.auth-logo-text span{color:var(--accent);font-weight:800;}
+.auth-tabs{display:flex;gap:.5rem;margin-bottom:2rem;background:var(--surface2);padding:.3rem;border-radius:10px;}
+.auth-tab{flex:1;padding:.5rem;text-align:center;border:none;background:none;color:var(--text-dim);font-family:var(--sans);font-size:.85rem;font-weight:500;border-radius:7px;cursor:pointer;transition:all .2s;}
+.auth-tab.active{background:var(--accent);color:#fff;}
+.form-group{margin-bottom:1.1rem;}
+.form-label{display:block;font-size:.75rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem;font-family:var(--mono);}
+.form-input{width:100%;background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-family:var(--sans);font-size:.95rem;padding:.7rem 1rem;border-radius:9px;outline:none;transition:border-color .2s;}
+.form-input:focus{border-color:var(--accent);}.form-input::placeholder{color:var(--text-muted);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.7rem 1.4rem;border:none;border-radius:9px;font-family:var(--sans);font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;}
+.btn-primary{background:var(--accent);color:#fff;width:100%;margin-top:.5rem;}
+.btn-primary:hover{background:#4a59e8;transform:translateY(-1px);box-shadow:0 6px 20px var(--accent-glow);}
+.auth-msg{font-size:.8rem;color:var(--red);margin-top:.75rem;text-align:center;min-height:1.2em;}
+.api-notice{background:rgba(91,106,245,.07);border:1px solid rgba(91,106,245,.2);border-radius:10px;padding:.9rem 1.2rem;font-size:.82rem;color:var(--text-dim);display:flex;gap:.6rem;align-items:flex-start;margin-top:1.2rem;}
+.api-notice strong{color:var(--accent);}
+#app{display:none;min-height:100vh;}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(8,9,13,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:.85rem 1.5rem;display:flex;align-items:center;justify-content:space-between;}
+.topbar-logo{font-family:var(--sans);font-size:1.1rem;font-weight:800;}.topbar-logo span{color:var(--accent);}
+.topbar-tag{font-family:var(--mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);background:rgba(91,106,245,.12);border:1px solid rgba(91,106,245,.25);padding:.2rem .5rem;border-radius:5px;}
+.topbar-left{display:flex;align-items:center;gap:.75rem;}
+.topbar-right{display:flex;align-items:center;gap:1rem;}
+.user-badge{display:flex;align-items:center;gap:.5rem;background:var(--surface2);border:1px solid var(--border2);padding:.4rem .9rem .4rem .5rem;border-radius:20px;}
+.user-avatar{width:26px;height:26px;background:linear-gradient(135deg,var(--accent),#a78bf5);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#fff;}
+.user-name{font-size:.85rem;font-weight:500;color:var(--text-dim);}
+.btn-ghost{background:none;border:1px solid var(--border2);color:var(--text-muted);font-size:.8rem;padding:.4rem .8rem;border-radius:7px;cursor:pointer;transition:all .2s;font-family:var(--sans);}
+.btn-ghost:hover{border-color:var(--red);color:var(--red);}
+.main{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 57px);}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:1.5rem 1rem;display:flex;flex-direction:column;gap:1.5rem;}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;}
+.stat-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:.9rem .8rem;text-align:center;}
+.stat-card .n{font-size:1.5rem;font-weight:800;line-height:1;}.stat-card .l{font-size:.65rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-top:.2rem;}
+.stat-card.blue .n{color:var(--accent);}.stat-card.green .n{color:var(--accent3);}.stat-card.yellow .n{color:var(--accent2);}.stat-card.red .n{color:var(--red);}
+.filter-group{display:flex;flex-direction:column;gap:.4rem;}
+.filter-label{font-family:var(--mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding-left:.4rem;}
+.filter-btn{display:flex;align-items:center;gap:.6rem;padding:.55rem .8rem;border-radius:8px;border:none;background:none;color:var(--text-dim);font-family:var(--sans);font-size:.85rem;cursor:pointer;transition:all .15s;text-align:left;width:100%;}
+.filter-btn:hover{background:var(--surface2);color:var(--text);}
+.filter-btn.active{background:rgba(91,106,245,.12);color:var(--accent);border-left:2px solid var(--accent);}
+.filter-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.cats-list{display:flex;flex-direction:column;gap:.3rem;}
+.cat-btn{display:flex;align-items:center;justify-content:space-between;padding:.45rem .8rem;border-radius:7px;border:none;background:none;color:var(--text-dim);font-family:var(--mono);font-size:.78rem;cursor:pointer;transition:all .15s;width:100%;}
+.cat-btn:hover{background:var(--surface2);color:var(--text);}.cat-btn.active{color:var(--accent2);}
+.cat-count{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:.05rem .35rem;font-size:.65rem;color:var(--text-muted);}
+.content{padding:1.5rem 2rem;display:flex;flex-direction:column;gap:1.5rem;}
+.toolbar{display:flex;align-items:center;gap:1rem;}
+.search-wrap{flex:1;position:relative;}
+.search-icon{position:absolute;left:.9rem;top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none;}
+.search-input{width:100%;background:var(--surface);border:1px solid var(--border2);color:var(--text);font-family:var(--sans);font-size:.9rem;padding:.65rem 1rem .65rem 2.5rem;border-radius:10px;outline:none;transition:border-color .2s;}
+.search-input:focus{border-color:var(--accent);}.search-input::placeholder{color:var(--text-muted);}
+.btn-add{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:.65rem 1.2rem;font-family:var(--sans);font-size:.88rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:.4rem;transition:all .2s;white-space:nowrap;}
+.btn-add:hover{background:#4a59e8;box-shadow:0 4px 16px var(--accent-glow);transform:translateY(-1px);}
+.prio-filter{display:flex;gap:.4rem;}
+.pf-btn{padding:.4rem .8rem;border-radius:7px;border:1px solid var(--border2);background:none;color:var(--text-muted);font-family:var(--mono);font-size:.7rem;cursor:pointer;transition:all .15s;text-transform:uppercase;letter-spacing:.06em;}
+.pf-btn.alta{color:#f55b5b;}.pf-btn.alta.on{background:rgba(245,91,91,.1);border-color:#f55b5b;}
+.pf-btn.media{color:var(--accent2);}.pf-btn.media.on{background:rgba(245,166,35,.1);border-color:var(--accent2);}
+.pf-btn.baixa{color:var(--accent3);}.pf-btn.baixa.on{background:rgba(45,212,160,.1);border-color:var(--accent3);}
+.tasks-header{display:flex;align-items:center;justify-content:space-between;}
+.tasks-title{font-size:.75rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);}
+.tasks-count{background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:.15rem .5rem;font-family:var(--mono);font-size:.7rem;color:var(--text-dim);}
+.task-list{display:flex;flex-direction:column;gap:.6rem;}
+.task-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;display:flex;align-items:flex-start;gap:1rem;transition:all .2s;position:relative;overflow:hidden;}
+.task-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;}
+.task-card.alta::before{background:var(--red);}
+.task-card.media::before{background:var(--accent2);}
+.task-card.baixa::before{background:var(--accent3);}
+.task-card:hover{border-color:var(--border2);transform:translateX(2px);}
+.task-card.done{opacity:.5;}.task-card.done .task-title{text-decoration:line-through;color:var(--text-muted);}
+.task-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--border2);background:none;cursor:pointer;flex-shrink:0;margin-top:2px;transition:all .2s;display:flex;align-items:center;justify-content:center;}
+.task-check:hover{border-color:var(--accent3);}
+.task-check.checked{background:var(--accent3);border-color:var(--accent3);}
+.task-check.checked::after{content:'✓';color:#fff;font-size:.65rem;font-weight:700;}
+.task-body{flex:1;min-width:0;}
+.task-title{font-size:.95rem;font-weight:500;color:var(--text);margin-bottom:.3rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.task-meta{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;}
+.task-cat{font-family:var(--mono);font-size:.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;}
+.task-prio{font-family:var(--mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;padding:.15rem .45rem;border-radius:4px;font-weight:500;}
+.task-prio.alta{color:var(--red);background:rgba(245,91,91,.1);}
+.task-prio.media{color:var(--accent2);background:rgba(245,166,35,.1);}
+.task-prio.baixa{color:var(--accent3);background:rgba(45,212,160,.1);}
+.task-date{font-family:var(--mono);font-size:.65rem;color:var(--text-muted);}
+.task-actions{display:flex;gap:.4rem;opacity:0;transition:opacity .2s;}
+.task-card:hover .task-actions{opacity:1;}
+.task-action-btn{width:28px;height:28px;border-radius:7px;border:1px solid var(--border2);background:none;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:all .15s;}
+.task-action-btn.edit:hover{border-color:var(--accent);color:var(--accent);}
+.task-action-btn.del:hover{border-color:var(--red);color:var(--red);}
+.empty-state{text-align:center;padding:4rem 2rem;color:var(--text-muted);}
+.empty-icon{font-size:3rem;margin-bottom:1rem;opacity:.4;}
+.empty-title{font-size:1rem;font-weight:600;color:var(--text-dim);margin-bottom:.4rem;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .2s;}
+.modal-overlay.open{opacity:1;pointer-events:auto;}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:2rem;width:100%;max-width:480px;transform:scale(.95);transition:transform .2s;}
+.modal-overlay.open .modal{transform:scale(1);}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;}
+.modal-title{font-size:1.1rem;font-weight:700;}
+.modal-close{width:30px;height:30px;border-radius:8px;border:1px solid var(--border2);background:none;color:var(--text-muted);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.modal-close:hover{border-color:var(--red);color:var(--red);}
+.modal-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+.form-select{width:100%;background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-family:var(--sans);font-size:.9rem;padding:.65rem 1rem;border-radius:9px;outline:none;cursor:pointer;transition:border-color .2s;}
+.form-select:focus{border-color:var(--accent);}
+.form-textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-family:var(--sans);font-size:.9rem;padding:.7rem 1rem;border-radius:9px;outline:none;resize:vertical;min-height:80px;transition:border-color .2s;}
+.form-textarea:focus{border-color:var(--accent);}.form-textarea::placeholder{color:var(--text-muted);}
+.modal-footer{display:flex;gap:.75rem;margin-top:1.5rem;}
+.btn-cancel{flex:1;background:var(--surface2);border:1px solid var(--border2);color:var(--text-dim);border-radius:9px;padding:.7rem;font-family:var(--sans);font-size:.9rem;cursor:pointer;transition:all .15s;}
+.btn-save{flex:2;background:var(--accent);color:#fff;border:none;border-radius:9px;padding:.7rem;font-family:var(--sans);font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;}
+.btn-save:hover{background:#4a59e8;}
+#toast{position:fixed;bottom:2rem;right:2rem;z-index:999;display:flex;flex-direction:column;gap:.5rem;pointer-events:none;}
+.toast-item{background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-family:var(--sans);font-size:.85rem;padding:.7rem 1.1rem;border-radius:10px;box-shadow:var(--shadow);animation:toastIn .3s ease;display:flex;align-items:center;gap:.5rem;}
+.toast-item.success{border-color:rgba(45,212,160,.3);color:var(--accent3);}
+.toast-item.error{border-color:rgba(245,91,91,.3);color:var(--red);}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:768px){.main{grid-template-columns:1fr;}.sidebar{display:none;}.content{padding:1rem;}.prio-filter{display:none;}}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;div id="auth-screen"&gt;
+  &lt;div class="auth-card"&gt;
+    &lt;div class="auth-logo"&gt;
+      &lt;div class="auth-logo-icon"&gt;✓&lt;/div&gt;
+      &lt;div class="auth-logo-text"&gt;Task&lt;span&gt;Master&lt;/span&gt; Pro&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="auth-tabs"&gt;
+      &lt;button class="auth-tab active" onclick="switchTab('login')"&gt;Entrar&lt;/button&gt;
+      &lt;button class="auth-tab" onclick="switchTab('registro')"&gt;Criar Conta&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div id="form-login"&gt;
+      &lt;div class="form-group"&gt;&lt;label class="form-label"&gt;E-mail&lt;/label&gt;&lt;input class="form-input" id="login-email" type="email" placeholder="zapani@mail.com"&gt;&lt;/div&gt;
+      &lt;div class="form-group"&gt;&lt;label class="form-label"&gt;Senha&lt;/label&gt;&lt;input class="form-input" id="login-senha" type="password" placeholder="••••••••"&gt;&lt;/div&gt;
+      &lt;button class="btn btn-primary" onclick="fazerLogin()"&gt;Entrar →&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div id="form-registro" style="display:none"&gt;
+      &lt;div class="form-group"&gt;&lt;label class="form-label"&gt;Nome&lt;/label&gt;&lt;input class="form-input" id="reg-nome" type="text" placeholder="Seu nome"&gt;&lt;/div&gt;
+      &lt;div class="form-group"&gt;&lt;label class="form-label"&gt;E-mail&lt;/label&gt;&lt;input class="form-input" id="reg-email" type="email" placeholder="zapani@mail.com"&gt;&lt;/div&gt;
+      &lt;div class="form-group"&gt;&lt;label class="form-label"&gt;Senha&lt;/label&gt;&lt;input class="form-input" id="reg-senha" type="password" placeholder="Mínimo 6 caracteres"&gt;&lt;/div&gt;
+      &lt;button class="btn btn-primary" onclick="fazerRegistro()"&gt;Criar Conta →&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="auth-msg" id="auth-msg"&gt;&lt;/div&gt;
+    &lt;div class="api-notice"&gt;&lt;span&gt;⚡&lt;/span&gt;&lt;div&gt;&lt;strong&gt;Conecta à sua API.&lt;/strong&gt; Inicie o servidor com &lt;code style="font-family:monospace"&gt;node server.js&lt;/code&gt; antes de usar.&lt;/div&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="app"&gt;
+  &lt;header class="topbar"&gt;
+    &lt;div class="topbar-left"&gt;
+      &lt;div class="topbar-logo"&gt;Task&lt;span&gt;Master&lt;/span&gt; Pro&lt;/div&gt;
+      &lt;div class="topbar-tag"&gt;v1.0&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="topbar-right"&gt;
+      &lt;div class="user-badge"&gt;
+        &lt;div class="user-avatar" id="user-avatar"&gt;Z&lt;/div&gt;
+        &lt;span class="user-name" id="user-name-display"&gt;Usuário&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;button class="btn-ghost" onclick="sair()"&gt;Sair&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+  &lt;div class="main"&gt;
+    &lt;aside class="sidebar"&gt;
+      &lt;div&gt;
+        &lt;div class="filter-label" style="margin-bottom:.6rem"&gt;Visão Geral&lt;/div&gt;
+        &lt;div class="stats-grid"&gt;
+          &lt;div class="stat-card blue"&gt;&lt;div class="n" id="s-total"&gt;0&lt;/div&gt;&lt;div class="l"&gt;Total&lt;/div&gt;&lt;/div&gt;
+          &lt;div class="stat-card green"&gt;&lt;div class="n" id="s-done"&gt;0&lt;/div&gt;&lt;div class="l"&gt;Feitas&lt;/div&gt;&lt;/div&gt;
+          &lt;div class="stat-card yellow"&gt;&lt;div class="n" id="s-pending"&gt;0&lt;/div&gt;&lt;div class="l"&gt;Abertas&lt;/div&gt;&lt;/div&gt;
+          &lt;div class="stat-card red"&gt;&lt;div class="n" id="s-alta"&gt;0&lt;/div&gt;&lt;div class="l"&gt;Urgentes&lt;/div&gt;&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class="filter-group"&gt;
+        &lt;div class="filter-label"&gt;Filtros&lt;/div&gt;
+        &lt;button class="filter-btn active" data-filter="todas" onclick="setFilter('todas',this)"&gt;&lt;span class="filter-dot" style="background:var(--accent)"&gt;&lt;/span&gt; Todas&lt;/button&gt;
+        &lt;button class="filter-btn" data-filter="abertas" onclick="setFilter('abertas',this)"&gt;&lt;span class="filter-dot" style="background:var(--accent2)"&gt;&lt;/span&gt; Em aberto&lt;/button&gt;
+        &lt;button class="filter-btn" data-filter="concluidas" onclick="setFilter('concluidas',this)"&gt;&lt;span class="filter-dot" style="background:var(--accent3)"&gt;&lt;/span&gt; Concluídas&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class="filter-group"&gt;
+        &lt;div class="filter-label"&gt;Categorias&lt;/div&gt;
+        &lt;div class="cats-list" id="cats-list"&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/aside&gt;
+    &lt;main class="content"&gt;
+      &lt;div class="toolbar"&gt;
+        &lt;div class="search-wrap"&gt;
+          &lt;span class="search-icon"&gt;🔍&lt;/span&gt;
+          &lt;input class="search-input" id="search-input" placeholder="Buscar tarefa..." oninput="buscarTarefas()"&gt;
+        &lt;/div&gt;
+        &lt;div class="prio-filter"&gt;
+          &lt;button class="pf-btn alta" onclick="togglePrio('alta',this)"&gt;Alta&lt;/button&gt;
+          &lt;button class="pf-btn media" onclick="togglePrio('media',this)"&gt;Média&lt;/button&gt;
+          &lt;button class="pf-btn baixa" onclick="togglePrio('baixa',this)"&gt;Baixa&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;button class="btn-add" onclick="abrirModal()"&gt;＋ Nova Tarefa&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class="tasks-header"&gt;
+        &lt;span class="tasks-title"&gt;Tarefas&lt;/span&gt;
+        &lt;span class="tasks-count" id="tasks-count"&gt;0 itens&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div class="task-list" id="task-list"&gt;
+        &lt;div class="empty-state"&gt;&lt;div class="spinner"&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="modal-overlay" id="modal" onclick="fecharModalFora(event)"&gt;
+  &lt;div class="modal"&gt;
+    &lt;div class="modal-header"&gt;
+      &lt;div class="modal-title" id="modal-title"&gt;Nova Tarefa&lt;/div&gt;
+      &lt;button class="modal-close" onclick="fecharModal()"&gt;✕&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="form-group"&gt;&lt;label class="form-label"&gt;Título *&lt;/label&gt;&lt;input class="form-input" id="m-titulo" placeholder="O que precisa ser feito?"&gt;&lt;/div&gt;
+    &lt;div class="form-group"&gt;&lt;label class="form-label"&gt;Descrição&lt;/label&gt;&lt;textarea class="form-textarea" id="m-desc" placeholder="Detalhes opcionais..."&gt;&lt;/textarea&gt;&lt;/div&gt;
+    &lt;div class="modal-row"&gt;
+      &lt;div class="form-group" style="margin:0"&gt;&lt;label class="form-label"&gt;Prioridade&lt;/label&gt;
+        &lt;select class="form-select" id="m-prio"&gt;&lt;option value="alta"&gt;🔴 Alta&lt;/option&gt;&lt;option value="media" selected&gt;🟡 Média&lt;/option&gt;&lt;option value="baixa"&gt;🟢 Baixa&lt;/option&gt;&lt;/select&gt;
+      &lt;/div&gt;
+      &lt;div class="form-group" style="margin:0"&gt;&lt;label class="form-label"&gt;Categoria&lt;/label&gt;&lt;input class="form-input" id="m-cat" placeholder="ex: estudos"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="modal-footer"&gt;
+      &lt;button class="btn-cancel" onclick="fecharModal()"&gt;Cancelar&lt;/button&gt;
+      &lt;button class="btn-save" id="btn-save" onclick="salvarTarefa()"&gt;Criar Tarefa&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="toast"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+const API='http://localhost:3000';
+let TOKEN=localStorage.getItem('tm_token')||'';
+let USER_NAME=localStorage.getItem('tm_name')||'';
+let editandoId=null,filtroAtual='todas',catAtual='',priosAtivas=new Set(),todasTarefas=[];
+if(TOKEN) entrarNoApp(USER_NAME);
+function switchTab(tab){
+  document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(tab==='login'&&i===0)||(tab==='registro'&&i===1)));
+  document.getElementById('form-login').style.display=tab==='login'?'':'none';
+  document.getElementById('form-registro').style.display=tab==='registro'?'':'none';
+  document.getElementById('auth-msg').textContent='';
+}
+async function fazerLogin(){
+  const email=document.getElementById('login-email').value.trim();
+  const senha=document.getElementById('login-senha').value;
+  if(!email||!senha)return setAuthMsg('Preencha email e senha.');
+  try{
+    const r=await fetch(API+'/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,senha})});
+    const d=await r.json();
+    if(!r.ok)return setAuthMsg(d.erro||'Credenciais inválidas.');
+    TOKEN=d.token;USER_NAME=d.nome;
+    localStorage.setItem('tm_token',TOKEN);localStorage.setItem('tm_name',USER_NAME);
+    entrarNoApp(USER_NAME);
+  }catch(e){setAuthMsg('❌ Servidor offline. Rode node server.js primeiro.');}
+}
+async function fazerRegistro(){
+  const nome=document.getElementById('reg-nome').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const senha=document.getElementById('reg-senha').value;
+  if(!nome||!email||!senha)return setAuthMsg('Preencha todos os campos.');
+  if(senha.length&lt;6)return setAuthMsg('Senha deve ter 6+ caracteres.');
+  try{
+    const r=await fetch(API+'/registrar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nome,email,senha})});
+    const d=await r.json();
+    if(!r.ok)return setAuthMsg(d.erro||'Erro ao criar conta.');
+    setAuthMsg('✅ Conta criada! Faça login.');switchTab('login');
+    document.getElementById('login-email').value=email;
+  }catch(e){setAuthMsg('❌ Servidor offline.');}
+}
+function setAuthMsg(m){document.getElementById('auth-msg').textContent=m;}
+function entrarNoApp(nome){
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('user-avatar').textContent=(nome||'U')[0].toUpperCase();
+  document.getElementById('user-name-display').textContent=nome||'Usuário';
+  carregarTarefas();
+}
+function sair(){
+  TOKEN='';USER_NAME='';localStorage.removeItem('tm_token');localStorage.removeItem('tm_name');
+  document.getElementById('app').style.display='none';
+  document.getElementById('auth-screen').style.display='flex';
+}
+async function carregarTarefas(){
+  try{
+    const r=await fetch(API+'/tarefas',{headers:{'x-token':TOKEN}});
+    if(r.status===401){sair();return;}
+    todasTarefas=await r.json();
+    renderTarefas();atualizarStats();renderCategorias();
+  }catch(e){toast('Erro ao carregar tarefas','error');}
+}
+function renderTarefas(){
+  const busca=document.getElementById('search-input').value.toLowerCase();
+  let f=todasTarefas.filter(t=>{
+    if(filtroAtual==='abertas'&&t.concluida)return false;
+    if(filtroAtual==='concluidas'&&!t.concluida)return false;
+    if(catAtual&&t.categoria!==catAtual)return false;
+    if(priosAtivas.size&&!priosAtivas.has(t.prioridade))return false;
+    if(busca&&!t.titulo.toLowerCase().includes(busca))return false;
+    return true;
+  });
+  document.getElementById('tasks-count').textContent=f.length+' '+(f.length===1?'item':'itens');
+  const lista=document.getElementById('task-list');
+  if(!f.length){lista.innerHTML='&lt;div class="empty-state"&gt;&lt;div class="empty-icon"&gt;📭&lt;/div&gt;&lt;div class="empty-title"&gt;Nenhuma tarefa aqui&lt;/div&gt;&lt;div class="empty-sub"&gt;Clique em "+ Nova Tarefa" para começar.&lt;/div&gt;&lt;/div&gt;';return;}
+  const o={alta:0,media:1,baixa:2};
+  f.sort((a,b)=>a.concluida-b.concluida||o[a.prioridade]-o[b.prioridade]);
+  lista.innerHTML=f.map(t=>`
+    &lt;div class="task-card ${t.prioridade} ${t.concluida?'done':''}" id="tc-${t.id}"&gt;
+      &lt;button class="task-check ${t.concluida?'checked':''}" onclick="toggleConcluida(${t.id},${t.concluida?0:1})"&gt;&lt;/button&gt;
+      &lt;div class="task-body"&gt;
+        &lt;div class="task-title"&gt;${esc(t.titulo)}&lt;/div&gt;
+        &lt;div class="task-meta"&gt;
+          &lt;span class="task-cat"&gt;# ${esc(t.categoria||'geral')}&lt;/span&gt;
+          &lt;span class="task-prio ${t.prioridade}"&gt;${t.prioridade}&lt;/span&gt;
+          &lt;span class="task-date"&gt;${fmtData(t.criado)}&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class="task-actions"&gt;
+        &lt;button class="task-action-btn edit" onclick="abrirEdicao(${t.id})"&gt;✏&lt;/button&gt;
+        &lt;button class="task-action-btn del" onclick="deletarTarefa(${t.id})"&gt;✕&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  `).join('');
+}
+async function toggleConcluida(id,v){
+  await fetch(API+'/tarefas/'+id,{method:'PUT',headers:{'Content-Type':'application/json','x-token':TOKEN},body:JSON.stringify({concluida:v})});
+  const t=todasTarefas.find(x=>x.id===id);if(t)t.concluida=v;
+  renderTarefas();atualizarStats();toast(v?'✅ Concluída!':'↩ Reaberta','success');
+}
+async function deletarTarefa(id){
+  const c=document.getElementById('tc-'+id);if(c)c.style.opacity='.3';
+  await fetch(API+'/tarefas/'+id,{method:'DELETE',headers:{'x-token':TOKEN}});
+  todasTarefas=todasTarefas.filter(t=>t.id!==id);
+  renderTarefas();atualizarStats();renderCategorias();toast('🗑 Removida','success');
+}
+function buscarTarefas(){renderTarefas();}
+function atualizarStats(){
+  const tot=todasTarefas.length,done=todasTarefas.filter(t=>t.concluida).length;
+  document.getElementById('s-total').textContent=tot;
+  document.getElementById('s-done').textContent=done;
+  document.getElementById('s-pending').textContent=tot-done;
+  document.getElementById('s-alta').textContent=todasTarefas.filter(t=>t.prioridade==='alta'&amp;&amp;!t.concluida).length;
+}
+function renderCategorias(){
+  const c={};todasTarefas.forEach(t=>{c[t.categoria||'geral']=(c[t.categoria||'geral']||0)+1;});
+  document.getElementById('cats-list').innerHTML=Object.entries(c).map(([cat,n])=>
+    `&lt;button class="cat-btn ${catAtual===cat?'active':''}" onclick="setCategoria('${cat}',this)"&gt;&lt;span&gt;# ${esc(cat)}&lt;/span&gt;&lt;span class="cat-count"&gt;${n}&lt;/span&gt;&lt;/button&gt;`
+  ).join('');
+}
+function setFilter(f,btn){
+  filtroAtual=f;catAtual='';
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  renderTarefas();
+}
+function setCategoria(cat,btn){
+  catAtual=catAtual===cat?'':cat;filtroAtual='todas';
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.toggle('active',b.dataset.filter==='todas'));
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  if(catAtual)btn.classList.add('active');renderTarefas();
+}
+function togglePrio(p,btn){
+  if(priosAtivas.has(p)){priosAtivas.delete(p);btn.classList.remove('on');}
+  else{priosAtivas.add(p);btn.classList.add('on');}renderTarefas();
+}
+function abrirModal(){
+  editandoId=null;
+  document.getElementById('modal-title').textContent='Nova Tarefa';
+  document.getElementById('btn-save').textContent='Criar Tarefa';
+  document.getElementById('m-titulo').value='';document.getElementById('m-desc').value='';
+  document.getElementById('m-prio').value='media';document.getElementById('m-cat').value='';
+  document.getElementById('modal').classList.add('open');
+  setTimeout(()=>document.getElementById('m-titulo').focus(),100);
+}
+function abrirEdicao(id){
+  const t=todasTarefas.find(x=>x.id===id);if(!t)return;
+  editandoId=id;
+  document.getElementById('modal-title').textContent='Editar Tarefa';
+  document.getElementById('btn-save').textContent='Salvar Alterações';
+  document.getElementById('m-titulo').value=t.titulo;document.getElementById('m-desc').value=t.descricao||'';
+  document.getElementById('m-prio').value=t.prioridade;document.getElementById('m-cat').value=t.categoria||'';
+  document.getElementById('modal').classList.add('open');
+}
+function fecharModal(){document.getElementById('modal').classList.remove('open');}
+function fecharModalFora(e){if(e.target===document.getElementById('modal'))fecharModal();}
+async function salvarTarefa(){
+  const titulo=document.getElementById('m-titulo').value.trim();
+  if(!titulo){document.getElementById('m-titulo').focus();return;}
+  const body={titulo,descricao:document.getElementById('m-desc').value.trim(),prioridade:document.getElementById('m-prio').value,categoria:document.getElementById('m-cat').value.trim()||'geral'};
+  const btn=document.getElementById('btn-save');btn.innerHTML='&lt;span class="spinner"&gt;&lt;/span&gt;';
+  try{
+    if(editandoId){
+      const r=await fetch(API+'/tarefas/'+editandoId,{method:'PUT',headers:{'Content-Type':'application/json','x-token':TOKEN},body:JSON.stringify(body)});
+      const updated=await r.json();
+      const idx=todasTarefas.findIndex(t=>t.id===editandoId);if(idx!==-1)todasTarefas[idx]=updated;
+      toast('✅ Atualizada!','success');
+    }else{
+      const r=await fetch(API+'/tarefas',{method:'POST',headers:{'Content-Type':'application/json','x-token':TOKEN},body:JSON.stringify(body)});
+      const nova=await r.json();
+      todasTarefas.unshift({...nova,concluida:0,criado:new Date().toISOString()});
+      toast('✅ Criada!','success');
+    }
+    fecharModal();renderTarefas();atualizarStats();renderCategorias();
+  }catch(e){toast('Erro ao salvar','error');}
+  btn.textContent=editandoId?'Salvar Alterações':'Criar Tarefa';
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&amp;&amp;document.getElementById('modal').classList.contains('open')&amp;&amp;e.target.tagName!=='TEXTAREA')salvarTarefa();
+  if(e.key==='Escape')fecharModal();
+});
+function esc(s){return String(s||'').replace(/&amp;/g,'&amp;amp;').replace(/&lt;/g,'&amp;lt;').replace(/&gt;/g,'&amp;gt;');}
+function fmtData(d){
+  if(!d)return'';
+  const dt=new Date(d.replace(' ','T')),agora=new Date(),diff=Math.floor((agora-dt)/1000);
+  if(diff&lt;60)return'agora';if(diff&lt;3600)return Math.floor(diff/60)+'min';
+  if(diff&lt;86400)return Math.floor(diff/3600)+'h';
+  return dt.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+}
+function toast(msg,type='success'){
+  const el=document.createElement('div');el.className='toast-item '+type;el.textContent=msg;
+  document.getElementById('toast').appendChild(el);setTimeout(()=>el.remove(),3000);
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div>
+</section>
+
+</main>
+</div>
+
+<footer class="footer">
+  <div class="footer-logo">JS Zapani's Academy</div>
+  <p>Do Zero ao Avançado — JavaScript, Node.js &amp; Bancos de Dados</p>
+  <p style="font-size:.75rem;opacity:.5">by Zapani · 12 Módulos · 60+ Exercícios · 1 Projeto Final Completo</p>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+function toggleAnswer(btn) {
+  const div = btn.nextElementSibling;
+  const rev = div.classList.toggle('revealed');
+  btn.classList.toggle('revealed', rev);
+  btn.innerHTML = rev ? '<span>✅</span> Resposta Revelada' :
